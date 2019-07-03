@@ -3,10 +3,11 @@ package com.bcabuddies.moneymanagement.Login.View;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bcabuddies.moneymanagement.Login.Presenter.LoginPresenterImp;
 import com.bcabuddies.moneymanagement.Login.Presenter.loginPresenter;
@@ -21,17 +22,17 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 public class Login extends AppCompatActivity implements LoginView {
 
-    private static final String TAG ="Logn.java" ;
+    private static final String TAG = "Login.java";
     Button googleLoginBtn;
 
     GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
     private loginPresenter loginPresenter;
-    private FirebaseAuth auth;
-    private String fNname, profUrl;
-
+    private String fName, profUrl;
 
 
     @Override
@@ -39,7 +40,7 @@ public class Login extends AppCompatActivity implements LoginView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        auth=FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         googleLoginBtn = findViewById(R.id.welcome_googlebtn);
         loginPresenter = new LoginPresenterImp(auth);
         loginPresenter.attachView(this);
@@ -77,12 +78,13 @@ public class Login extends AppCompatActivity implements LoginView {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 loginPresenter.firebaseAuthWithGoogle(account);
-                fNname = account.getDisplayName();
+                assert account != null;
+                fName = account.getDisplayName();
                 //profUrl = account.getPhotoUrl().toString();
-                profUrl = account.getPhotoUrl().toString();
+                profUrl = Objects.requireNonNull(account.getPhotoUrl()).toString();
                 //Remove thumbnail url and replace the original part of the Url with the new part
                 profUrl = profUrl.substring(0, profUrl.length() - 15) + "s400-c/photo.jpg";
-                Log.e("googleRet", "name: " + fNname);
+                Log.e("googleRet", "name: " + fName);
                 Log.e("googleRet", "pofile: " + profUrl);
                 Log.e("mGoogleSignIn", "Google sign in try");
 
@@ -104,8 +106,8 @@ public class Login extends AppCompatActivity implements LoginView {
     public void googleLoginSuccess() {
         Utils.showMessage(this, "Google Login Success!");
         Bundle data = new Bundle();
-        Log.e(TAG, "thirdPartyLoginSuccess: name and profile " + fNname + " " + profUrl);
-        data.putString("name", fNname);
+        Log.e(TAG, "thirdPartyLoginSuccess: name and profile " + fName + " " + profUrl);
+        data.putString("name", fName);
         data.putString("profile", profUrl);
         Utils.setIntentExtra(this, PostRegistration.class, "data", data);
     }

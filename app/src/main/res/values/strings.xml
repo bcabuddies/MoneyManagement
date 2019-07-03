@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">MoneyManagement</string>
+    <string name="add_user">Add user</string>
+    <string name="name">Name</string>
+    <string name="enter_age">Enter Age</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="enter_amount">Enter Amount</string>
+    <string name="enter_interest_rate">Enter Interest Rate</string>
+    <string name="preview">Preview</string>
+    <string name="date">Date</string>
+    <string name="_01_01_2019">01.01.2019</string>
+    <string name="aadhar_card">Aadhar Card</string>
+    <string name="no">No</string>
+    <string name="address">Address</string>
+    <string name="reference">Reference</string>
+    <string name="relative">Relative</string>
 </resources>

@@ -104,6 +104,6 @@ public class AddUser extends AppCompatActivity implements AddUserView {
 
     @Override
     public void everythingFine() {
-        Utils.setIntentParcable(this, Preview.class, "User", usersParcelable);
+        Utils.setIntentParcel(this, Preview.class, "User", usersParcelable);
     }
 }

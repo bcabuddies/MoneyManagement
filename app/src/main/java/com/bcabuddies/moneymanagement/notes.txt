@@ -1,0 +1,10 @@
+parcel data fetch =
+    Bundle data = getIntent().getExtras();
+    Student student = (Student) data.getParcelable("student");
+
+parcel data send =
+    intent.putExtra("student", new Student("1","Mike","6"));
+    Utils.setIntentParcel(this, Destination.class, "User", new UsersParcelable("1","Mike","6"));
+                            or
+    private UsersParcelable usersParcelable;
+    Utils.setIntentParcel(this, Destination.class, "User", usersParcelable);

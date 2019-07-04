@@ -34,7 +34,7 @@ public class Utils<Data> {
         return intent;
     }
 
-    public static Intent setIntentParcable(Context context, Class destination, String key, Parcelable data) {
+    public static Intent setIntentParcel(Context context, Class destination, String key, Parcelable data) {
         Intent intent = new Intent(context, destination);
         intent.putExtra(key, data);
         context.startActivity(intent);

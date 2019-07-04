@@ -12,4 +12,9 @@ public class AddUserPresenterImpl implements AddUserPresenter {
     public void detachView() {
 
     }
+
+    @Override
+    public void getUserData() {
+
+    }
 }

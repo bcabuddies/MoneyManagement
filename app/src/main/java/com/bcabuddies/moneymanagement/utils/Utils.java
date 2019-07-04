@@ -3,6 +3,7 @@ package com.bcabuddies.moneymanagement.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.widget.Toast;
 
 public class Utils<Data> {
@@ -14,7 +15,7 @@ public class Utils<Data> {
         Intent intent = new Intent(context, destination);
         context.startActivity(intent);
 
-        return intent ;
+        return intent;
     }
 
     public static Intent setIntentNoBackLog(Context context, Class destination) {
@@ -22,7 +23,7 @@ public class Utils<Data> {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
 
-        return intent ;
+        return intent;
     }
 
     public static Intent setIntentExtra(Context context, Class destination, String key, Bundle data) {
@@ -30,7 +31,15 @@ public class Utils<Data> {
         intent.putExtra(key, data);
         context.startActivity(intent);
 
-        return intent ;
+        return intent;
+    }
+
+    public static Intent setIntentParcable(Context context, Class destination, String key, Parcelable data) {
+        Intent intent = new Intent(context, destination);
+        intent.putExtra(key, data);
+        context.startActivity(intent);
+
+        return intent;
     }
 
     public static void showMessage(Context context, String message) {

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,12 +51,7 @@ public class Login extends AppCompatActivity implements LoginView {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        googleLoginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GoogleLogin();
-            }
-        });
+        googleLoginBtn.setOnClickListener(v -> GoogleLogin());
 
     }
 
@@ -85,7 +79,7 @@ public class Login extends AppCompatActivity implements LoginView {
                 //Remove thumbnail url and replace the original part of the Url with the new part
                 profUrl = profUrl.substring(0, profUrl.length() - 15) + "s400-c/photo.jpg";
                 Log.e("googleRet", "name: " + fName);
-                Log.e("googleRet", "pofile: " + profUrl);
+                Log.e("googleRet", "profile: " + profUrl);
                 Log.e("mGoogleSignIn", "Google sign in try");
 
             } catch (ApiException e) {

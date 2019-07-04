@@ -4,4 +4,5 @@ import com.bcabuddies.moneymanagement.AddUser.View.AddUserView;
 import com.bcabuddies.moneymanagement.Base.BasePresenter;
 
 public interface AddUserPresenter extends BasePresenter<AddUserView> {
+    void getUserData();
 }

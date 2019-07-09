@@ -1,3 +1,4 @@
+-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
 TODO 09.07.19
 1. Login -
        *a)* Create Login and MVP
@@ -6,25 +7,37 @@ TODO 09.07.19
 2. PostRegistration -
        *a)* Create PostRegistration and MVP
        *b)* User Data get from Login and show
-       *c) User Data upload to Firebase;
-       *d) Check for Admin email and only if Admin send to Home else logout and send to Welcome
+       *c)* User Data upload to Firebase;
+       *d)* Check for Admin email and only if Admin send to Home else logout and send to Welcome
+       *e)* If user is not Admin it will log out and send to Login.java
 3. Home -
        *a)* Create Home and MVP
-       *b) Only admins can login - admin emails in database at "Admins/AdminEmails/email"
-        c) Add new user
-        d) Add photos like Aadhar card, PAN card, etc.
-        e) Show users on Home Screen
-4. UserActivity -
+       *b)* Only admins can login - admin emails in database at "Admins/AdminEmails/email"
+       *c)* Add new user button
+        d) Show users on Home Screen
+6. AddUser -
+       *a)* Create AddUser and MVP
+       *b) Layouts
+        c) Admins can add users details
+        d) Admins can upload photos like - AADHAR, PAN, etc.
+        e) All "compulsory" details should be complete before adding user to database
+5. UserActivity -
         a) create UserActivity and MVP
         b) open UserActivity when clicking userCard
         c) show user details
         d) buttons - Complete User, Update Users;
         e) Complete User, Update Users function
 
-How to show if any point is completed or being worked on
-1. working: "*<point>" in starting of the point eg - *a) , it will show that the point is under work
-2. complete: "*<point>*" surround with "*" eg - *a)* , it will show that the point is done
+* - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - *
 
+How to show if any point is completed or being worked on
+    1. working: "*<point>" in starting of the point eg - *a) , the point is under work
+    2. complete: "*<point>*" surround with "*" eg - *a)* , the point is done
+PS: single * = working, surrounding ** = complete;
+
+-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
+
+Extra Data :-
 
 parcel data fetch =
     Bundle data = getIntent().getExtras();

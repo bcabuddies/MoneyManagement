@@ -1,3 +1,31 @@
+TODO 09.07.19
+1. Login -
+       *a)* Create Login and MVP
+       *b)* Login with Google
+       *c)* Get profileImg, name, email and send to PostReg
+2. PostRegistration -
+       *a)* Create PostRegistration and MVP
+       *b)* User Data get from Login and show
+       *c) User Data upload to Firebase;
+       *d) Check for Admin email and only if Admin send to Home else logout and send to Welcome
+3. Home -
+       *a)* Create Home and MVP
+       *b) Only admins can login - admin emails in database at "Admins/AdminEmails/email"
+        c) Add new user
+        d) Add photos like Aadhar card, PAN card, etc.
+        e) Show users on Home Screen
+4. UserActivity -
+        a) create UserActivity and MVP
+        b) open UserActivity when clicking userCard
+        c) show user details
+        d) buttons - Complete User, Update Users;
+        e) Complete User, Update Users function
+
+How to show if any point is completed or being worked on
+1. working: "*<point>" in starting of the point eg - *a) , it will show that the point is under work
+2. complete: "*<point>*" surround with "*" eg - *a)* , it will show that the point is done
+
+
 parcel data fetch =
     Bundle data = getIntent().getExtras();
     Student student = (Student) data.getParcelable("student");

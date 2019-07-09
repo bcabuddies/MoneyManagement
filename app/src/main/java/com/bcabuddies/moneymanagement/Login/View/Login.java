@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bcabuddies.moneymanagement.Login.Presenter.LoginPresenterImp;
 import com.bcabuddies.moneymanagement.Login.Presenter.loginPresenter;
-import com.bcabuddies.moneymanagement.PostRegistration;
+import com.bcabuddies.moneymanagement.PostRegistration.View.PostRegistration;
 import com.bcabuddies.moneymanagement.R;
 import com.bcabuddies.moneymanagement.utils.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -31,7 +31,7 @@ public class Login extends AppCompatActivity implements LoginView {
     GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
     private loginPresenter loginPresenter;
-    private String fName, profUrl;
+    private String fName, profUrl, email;
 
 
     @Override
@@ -74,6 +74,7 @@ public class Login extends AppCompatActivity implements LoginView {
                 loginPresenter.firebaseAuthWithGoogle(account);
                 assert account != null;
                 fName = account.getDisplayName();
+                email = account.getEmail();
                 //profUrl = account.getPhotoUrl().toString();
                 profUrl = Objects.requireNonNull(account.getPhotoUrl()).toString();
                 //Remove thumbnail url and replace the original part of the Url with the new part
@@ -100,9 +101,10 @@ public class Login extends AppCompatActivity implements LoginView {
     public void googleLoginSuccess() {
         Utils.showMessage(this, "Google Login Success!");
         Bundle data = new Bundle();
-        Log.e(TAG, "thirdPartyLoginSuccess: name and profile " + fName + " " + profUrl);
+        Log.e(TAG, "thirdPartyLoginSuccess: name and profile " + fName + " " + profUrl + " " + email);
         data.putString("name", fName);
         data.putString("profile", profUrl);
+        data.putString("email", email);
         Utils.setIntentExtra(this, PostRegistration.class, "data", data);
     }
 

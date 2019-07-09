@@ -14,4 +14,6 @@
     <string name="address">Address</string>
     <string name="reference">Reference</string>
     <string name="relative">Relative</string>
+    <string name="email">Email</string>
+    <string name="next">Next</string>
 </resources>

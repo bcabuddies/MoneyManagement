@@ -12,7 +12,7 @@
         <activity android:name=".Preview.View.Preview"></activity>
         <activity android:name=".AddUser.View.AddUser" />
         <activity android:name=".Home.View.Home" />
-        <activity android:name=".PostRegistration" />
+        <activity android:name=".PostRegistration.View.PostRegistration" />
         <activity android:name=".Login.View.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

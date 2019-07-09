@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MoneyManagement</string>
+    <string name="app_name">Money Management v1</string>
     <string name="add_user">Add user</string>
     <string name="name">Name</string>
     <string name="enter_age">Enter Age</string>
@@ -16,4 +16,6 @@
     <string name="relative">Relative</string>
     <string name="email">Email</string>
     <string name="next">Next</string>
+    <string name="google_requestIdToken">751456404768-4d2026772jh67jk1286mardp0c9dl6kc.apps.googleusercontent.com</string>
+    <string name="log_out">Log Out</string>
 </resources>

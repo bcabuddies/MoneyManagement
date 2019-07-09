@@ -74,6 +74,8 @@ public class PostRegistration extends AppCompatActivity implements PostRegView {
     @OnClick(R.id.post_nextBtn)
     public void onViewClicked() {
         //add user data to Database
+        String name = Objects.requireNonNull(postNameLayout.getEditText()).getText().toString();
+        bundle.putString("name", name);
         postRegPresenter.uploadData(bundle);
     }
 
@@ -92,8 +94,10 @@ public class PostRegistration extends AppCompatActivity implements PostRegView {
 
     @Override
     public void userIsNotAdmin() {
-        //user is not admin
+        //user is not admin signing out and sending to Login Page
+
         Log.e(TAG, "userIsNotAdmin: user is not admin ");
+        Utils.googleSignOut(this);
     }
 
     @Override

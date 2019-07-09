@@ -39,24 +39,28 @@ public class PostRegPresenterImpl implements PostRegPresenter {
         String email = bundle.getString("email");
         String profile = bundle.getString("profile");
 
-        HashMap<String, Object> maps = new HashMap<>();
-        maps.put("name", name);
-        maps.put("email", email);
-        maps.put("profile", profile);
+        if (!name.isEmpty() || name.equals(null)) {
+            HashMap<String, Object> maps = new HashMap<>();
+            maps.put("name", name);
+            maps.put("email", email);
+            maps.put("profile", profile);
 
-        assert user != null;
-        Log.e(TAG, "uploadData: inside PostRegImpl uploadData current user = " + user.getUid());
+            assert user != null;
+            Log.e(TAG, "uploadData: inside PostRegImpl uploadData current user = " + user.getUid());
 
-        firebaseFirestore.collection("Users").document(user.getUid())
-                .update(maps).addOnCompleteListener(task -> {
-            if (task.isComplete()) {
-                view.uploadSuccess();
-            } else {
-                String error;
-                error = Objects.requireNonNull(task.getException()).getMessage();
-                view.errorMsg(error);
-            }
-        });
+            firebaseFirestore.collection("Users").document(user.getUid())
+                    .set(maps).addOnCompleteListener(task -> {
+                if (task.isComplete()) {
+                    view.uploadSuccess();
+                } else {
+                    String error;
+                    error = Objects.requireNonNull(task.getException()).getMessage();
+                    view.errorMsg(error);
+                }
+            });
+        } else {
+            view.errorMsg("Please Fill name Field");
+        }
     }
 
     @Override

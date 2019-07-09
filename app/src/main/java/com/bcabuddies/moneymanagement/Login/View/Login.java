@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bcabuddies.moneymanagement.Home.View.Home;
 import com.bcabuddies.moneymanagement.Login.Presenter.LoginPresenterImp;
 import com.bcabuddies.moneymanagement.Login.Presenter.loginPresenter;
 import com.bcabuddies.moneymanagement.PostRegistration.View.PostRegistration;
@@ -26,9 +27,8 @@ import java.util.Objects;
 public class Login extends AppCompatActivity implements LoginView {
 
     private static final String TAG = "Login.java";
-    Button googleLoginBtn;
 
-    GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
     private loginPresenter loginPresenter;
     private String fName, profUrl, email;
@@ -40,13 +40,15 @@ public class Login extends AppCompatActivity implements LoginView {
         setContentView(R.layout.activity_main);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        googleLoginBtn = findViewById(R.id.welcome_googlebtn);
+        Button googleLoginBtn = findViewById(R.id.welcome_googlebtn);
         loginPresenter = new LoginPresenterImp(auth);
         loginPresenter.attachView(this);
 
+        loginPresenter.checkLogin();
+
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("751456404768-4d2026772jh67jk1286mardp0c9dl6kc.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.google_requestIdToken))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -99,7 +101,6 @@ public class Login extends AppCompatActivity implements LoginView {
 
     @Override
     public void googleLoginSuccess() {
-        Utils.showMessage(this, "Google Login Success!");
         Bundle data = new Bundle();
         Log.e(TAG, "thirdPartyLoginSuccess: name and profile " + fName + " " + profUrl + " " + email);
         data.putString("name", fName);
@@ -110,7 +111,13 @@ public class Login extends AppCompatActivity implements LoginView {
 
     @Override
     public void loginError(String error) {
-        Utils.showMessage(this, "Login error " + error);
+        Utils.showMessage(this, error);
+    }
+
+    @Override
+    public void userLogin() {
+        //user already logged in
+        Utils.setIntentNoBackLog(this, Home.class);
     }
 
     @Override

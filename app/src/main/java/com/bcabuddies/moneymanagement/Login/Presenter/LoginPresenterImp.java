@@ -6,6 +6,7 @@ import com.bcabuddies.moneymanagement.Login.View.LoginView;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Objects;
@@ -27,7 +28,8 @@ public class LoginPresenterImp implements loginPresenter {
         auth.signInWithCredential(credential).addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 try {
-                    loginView.loginError(Objects.requireNonNull(task.getException()).getMessage());
+                    loginView.loginError("Google Login Error");
+                    Log.e("LoginPresenter", "firebaseAuthWithGoogle: error " + Objects.requireNonNull(task.getException()).getMessage());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -35,6 +37,16 @@ public class LoginPresenterImp implements loginPresenter {
                 loginView.googleLoginSuccess();
             }
         });
+    }
+
+    @Override
+    public void checkLogin() {
+        //check if user is logged in
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            //user is logged in
+            loginView.userLogin();
+        }
     }
 
     @Override

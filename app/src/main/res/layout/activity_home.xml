@@ -4,9 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/grad_bg"
     tools:context=".Home.View.Home">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/home_back">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/home_profileView"
         android:layout_width="50dp"
@@ -34,7 +38,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/home_recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+             android:background="#232323"/>
     </androidx.cardview.widget.CardView>
 
     <Button
@@ -60,7 +65,7 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/home_profileView"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/home_profileView"
         app:layout_constraintTop_toTopOf="@+id/home_profileView" />

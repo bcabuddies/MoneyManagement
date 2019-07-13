@@ -44,9 +44,9 @@
                 style="@style/InputEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:textColorHint="@color/btn_dark_color"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -63,12 +63,10 @@
                 style="@style/InputEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
                 android:textColorHint="@color/btn_dark_color"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/add_user_name_textLayout"
+                app:layout_constraintStart_toStartOf="@+id/add_user_name_textLayout"
                 app:layout_constraintTop_toBottomOf="@+id/add_user_name_textLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -82,12 +80,11 @@
                 style="@style/InputEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:textColorHint="@color/btn_dark_color"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/add_user_name_textLayout"
+                app:layout_constraintStart_toStartOf="@+id/add_user_name_textLayout"
                 app:layout_constraintTop_toBottomOf="@+id/add_user_age_textLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -101,12 +98,10 @@
                 style="@style/InputEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
                 android:textColorHint="@color/btn_dark_color"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/add_user_name_textLayout"
+                app:layout_constraintStart_toStartOf="@+id/add_user_name_textLayout"
                 app:layout_constraintTop_toBottomOf="@+id/add_user_intAmt_textLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -120,9 +115,9 @@
                 style="@style/InputEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/add_user_intPer_textLayout">
@@ -155,11 +150,9 @@
                 android:id="@+id/add_user_aadharCard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/add_user_date_card"
+                app:layout_constraintStart_toStartOf="@+id/add_user_date_card"
                 app:layout_constraintTop_toBottomOf="@+id/add_user_date_card">
 
                 <LinearLayout
@@ -191,11 +184,9 @@
                 android:id="@+id/add_user_addressCard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/add_user_date_card"
+                app:layout_constraintStart_toStartOf="@+id/add_user_date_card"
                 app:layout_constraintTop_toBottomOf="@+id/add_user_aadharCard">
 
                 <LinearLayout
@@ -227,11 +218,9 @@
                 android:id="@+id/add_user_referenceCard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/add_user_date_card"
+                app:layout_constraintStart_toStartOf="@+id/add_user_date_card"
                 app:layout_constraintTop_toBottomOf="@+id/add_user_addressCard">
 
                 <LinearLayout
@@ -263,11 +252,11 @@
                 android:id="@+id/add_user_relativeCard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/add_user_date_card"
+                app:layout_constraintStart_toStartOf="@+id/add_user_date_card"
                 app:layout_constraintTop_toBottomOf="@+id/add_user_referenceCard">
 
                 <LinearLayout

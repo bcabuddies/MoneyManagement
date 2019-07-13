@@ -19,4 +19,7 @@
     <string name="google_requestIdToken">751456404768-4d2026772jh67jk1286mardp0c9dl6kc.apps.googleusercontent.com</string>
     <string name="log_out">Log Out</string>
     <string name="submit">Submit</string>
+    <string name="desc">desc</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="upload">upload</string>
 </resources>

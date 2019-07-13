@@ -1,4 +1,4 @@
-package com.bcabuddies.moneymanagement.Preview.View;
+package com.bcabuddies.moneymanagement.PreviewUser.View;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bcabuddies.moneymanagement.R;
 
-public class Preview extends AppCompatActivity implements PreviewView {
+public class PreviewUser extends AppCompatActivity implements PreviewUserView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

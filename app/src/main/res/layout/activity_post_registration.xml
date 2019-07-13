@@ -17,7 +17,7 @@
         android:id="@+id/postreg_detback"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/postreg_back2"
+        android:src="@drawable/postreg_user_back"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="parent"

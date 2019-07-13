@@ -15,6 +15,7 @@ TODO 09.07.19
        *b)* Only admins can login - admin emails in database at "Admins/AdminEmails/email"
        *c)* Add new user button
         d) Show users on Home Screen
+       *e) LOG OUT button is for test need to change and put it to a : menu after testing
 6. AddUser -
        *a)* Create AddUser and MVP
        *b) Layouts

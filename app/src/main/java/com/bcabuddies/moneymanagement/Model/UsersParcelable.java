@@ -25,6 +25,9 @@ public class UsersParcelable implements Parcelable {
     private String reference;
     private String relative;
 
+    public UsersParcelable() {
+    }
+
     public UsersParcelable(long id, String name, String age, String amount, String intRate, String date, String aadhar, String address, String reference, String relative) {
         this.id = id;
         this.name = name;

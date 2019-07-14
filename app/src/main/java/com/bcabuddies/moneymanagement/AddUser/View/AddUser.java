@@ -2,6 +2,7 @@ package com.bcabuddies.moneymanagement.AddUser.View;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +17,8 @@ import com.bcabuddies.moneymanagement.PreviewUser.View.PreviewUser;
 import com.bcabuddies.moneymanagement.R;
 import com.bcabuddies.moneymanagement.utils.Utils;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +61,11 @@ public class AddUser extends AppCompatActivity implements AddUserView {
 
     private UsersParcelable usersParcelable;
     private AddUserPresenter presenter;
-    private String name, age, amout, intRate, date, aadhar, address, reference, relative;
+    public static String aadhar, address, reference, relative;
+    private final String YES = "Yes";
+    private final String NO = "No";
+    private final String TAG = "AddUser.java";
+    private String name, age, amout, intRate, date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +75,7 @@ public class AddUser extends AppCompatActivity implements AddUserView {
 
         presenter = new AddUserPresenterImpl();
         presenter.attachView(this);
+        usersParcelable = new UsersParcelable();
     }
 
     @Override
@@ -101,9 +109,58 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     }
 
     private void getData() {
-        name = addUserNameTextLayout.getEditText().getText().toString();
-        age = addUserAgeTextLayout.getEditText().getText().toString();
+        //get data from editTexts
 
+        removeErrors();
+
+        Log.e(TAG, "getData: clicked ");
+        name = Objects.requireNonNull(addUserNameTextLayout.getEditText()).getText().toString();
+        age = Objects.requireNonNull(addUserAgeTextLayout.getEditText()).getText().toString();
+        amout = Objects.requireNonNull(addUserIntAmtTextLayout.getEditText()).getText().toString();
+        intRate = Objects.requireNonNull(addUserIntPerTextLayout.getEditText()).getText().toString();
+        date = dateShowTv.getText().toString();
+
+        usersParcelable.setName(name);
+        usersParcelable.setAge(age);
+        usersParcelable.setAmount(amout);
+        usersParcelable.setIntRate(intRate);
+        usersParcelable.setDate(date);
+
+        //for testing purpose please change it after testing errors
+        usersParcelable.setAadhar(YES);
+        usersParcelable.setAddress(YES);
+        usersParcelable.setReference(YES);
+        usersParcelable.setRelative(YES);
+
+        aadharApprovedTv.setText(YES);
+        addressApprovedTv.setText(YES);
+        referenceApprovedTv.setText(YES);
+        relativeApprovedTv.setText(YES);
+
+        if (aadharApprovedTv.getText().toString().equals(YES))
+            changeTextAndColor(aadharApprovedTv);
+        if (addressApprovedTv.getText().toString().equals(YES))
+            changeTextAndColor(addressApprovedTv);
+        if (referenceApprovedTv.getText().toString().equals(YES))
+            changeTextAndColor(referenceApprovedTv);
+        if (relativeApprovedTv.getText().toString().equals(YES))
+            changeTextAndColor(relativeApprovedTv);
+
+
+        presenter.checkDetailsAndSubmit(usersParcelable);
+    }
+
+    private void changeTextAndColor(TextView textView) {
+        textView.setText(YES);
+        textView.setTextColor(getColor(R.color.green));
+    }
+
+    private void removeErrors() {
+        //remove errors from TextFields
+        addUserNameTextLayout.setError(null);
+        addUserAgeTextLayout.setError(null);
+        addUserIntAmtTextLayout.setError(null);
+        addUserIntPerTextLayout.setError(null);
     }
 
     @Override

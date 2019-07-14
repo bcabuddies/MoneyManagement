@@ -19,9 +19,12 @@ TODO 09.07.19
 6. AddUser -
        *a)* Create AddUser and MVP
        *b) Layouts
-        c) Admins can add users details
+       *c) Admins can add users details
         d) Admins can upload photos like - AADHAR, PAN, etc.
-        e) All "compulsory" details should be complete before adding user to database
+       *e) All "compulsory" details should be complete before adding user to database
+       *f)* Fields showing errors if not filled
+       *g)* DatePicker is working
+       *h)* Data is passing with Parcel to Presenter
 5. UserActivity -
         a) create UserActivity and MVP
         b) open UserActivity when clicking userCard

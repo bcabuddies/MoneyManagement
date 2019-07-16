@@ -1,12 +1,16 @@
 package com.bcabuddies.moneymanagement.AddUser.View;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -17,12 +21,16 @@ import com.bcabuddies.moneymanagement.PreviewUser.View.PreviewUser;
 import com.bcabuddies.moneymanagement.R;
 import com.bcabuddies.moneymanagement.utils.Utils;
 import com.google.android.material.textfield.TextInputLayout;
+import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import id.zelory.compressor.Compressor;
 
 public class AddUser extends AppCompatActivity implements AddUserView {
 
@@ -67,6 +75,9 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     private final String TAG = "AddUser.java";
     private String name, age, amout, intRate, date;
 
+    final int adhar_code = 101, address_code = 102, reference_code = 103, relative_code = 104;
+    private Bitmap thumb_Bitmap = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,16 +101,28 @@ public class AddUser extends AppCompatActivity implements AddUserView {
                 presenter.showDatePicker();
                 break;
             case R.id.add_user_aadharCard:
-                presenter.addPhoto("Aadhar");
+                //presenter.addPhoto("Aadhar");
+                Intent adhar_intent = CropImage.activity()
+                        .setAspectRatio(1, 1).getIntent(getContext());
+                startActivityForResult(adhar_intent, adhar_code);
                 break;
             case R.id.add_user_addressCard:
-                presenter.addPhoto("Address");
+                //presenter.addPhoto("Address");
+                Intent address_intent = CropImage.activity()
+                        .setAspectRatio(1, 1).getIntent(getContext());
+                startActivityForResult(address_intent, address_code);
                 break;
             case R.id.add_user_referenceCard:
-                presenter.addPhoto("Reference");
+                //presenter.addPhoto("Reference");
+                Intent reference_intent = CropImage.activity()
+                        .setAspectRatio(1, 1).getIntent(getContext());
+                startActivityForResult(reference_intent, reference_code);
                 break;
             case R.id.add_user_relativeCard:
-                presenter.addPhoto("Relative");
+                //presenter.addPhoto("Relative");
+                Intent relative_intent = CropImage.activity()
+                        .setAspectRatio(1, 1).getIntent(getContext());
+                startActivityForResult(relative_intent, relative_code);
                 break;
             case R.id.add_user_prevBtn:
                 //send values to Presenter to calculate and all
@@ -209,5 +232,51 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     @Override
     public void showDate(String date) {
         dateShowTv.setText(date);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri mainImageUri = null;
+        if (requestCode == adhar_code) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                mainImageUri = Objects.requireNonNull(result).getUri();
+                Log.e(TAG, "onActivityResult adhae: " + mainImageUri.toString());
+            }
+        } else if (requestCode == address_code) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                mainImageUri = Objects.requireNonNull(result).getUri();
+                Log.e(TAG, "onActivityResult address: " + mainImageUri.toString());
+            }
+        } else if (requestCode == reference_code) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                mainImageUri = Objects.requireNonNull(result).getUri();
+                Log.e(TAG, "onActivityResult reference: " + mainImageUri.toString());
+            }
+        } else if (requestCode == relative_code) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                mainImageUri = Objects.requireNonNull(result).getUri();
+                Log.e(TAG, "onActivityResult relative: " + mainImageUri.toString());
+            }
+        }
+        if (mainImageUri != null) {
+            File thumb_filePathUri = new File(mainImageUri.getPath());
+            try {
+                thumb_Bitmap = new Compressor(this).setMaxWidth(400).setMaxHeight(400).setQuality(50).compressToBitmap(thumb_filePathUri);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            thumb_Bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+            byte[] thumb_byte = byteArrayOutputStream.toByteArray();            //upload this on firebase storage
+            Log.e(TAG, "onActivityResult: thumb_byte" + thumb_byte.toString());
+            presenter.imagePost(thumb_byte);
+        } else if (mainImageUri == null) {
+            Utils.showMessage(this, "Please select an image");
+        }
     }
 }

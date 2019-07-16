@@ -83,4 +83,9 @@ public class AddUserPresenterImpl implements AddUserPresenter {
             view.TextFieldsError("Please Fill Interest", 3);
 
     }
+
+    @Override
+    public void imagePost(byte[] thumb_byte) {
+
+    }
 }

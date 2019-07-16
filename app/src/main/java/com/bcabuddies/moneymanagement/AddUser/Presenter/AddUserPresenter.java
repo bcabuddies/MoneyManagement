@@ -12,4 +12,6 @@ public interface AddUserPresenter extends BasePresenter<AddUserView> {
     void showDatePicker();
 
     void checkDetailsAndSubmit(UsersParcelable parcelable);
+
+    void imagePost(byte[] thumb_byte);
 }

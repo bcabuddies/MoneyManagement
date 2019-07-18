@@ -11,9 +11,9 @@
     <string name="_01_01_2019">01/01/19</string>
     <string name="aadhar_card">Aadhar Card</string>
     <string name="no">No</string>
-    <string name="address">Address</string>
-    <string name="reference">Reference</string>
-    <string name="relative">Relative</string>
+    <string name="address">User Address</string>
+    <string name="reference">User Reference</string>
+    <string name="relative">User Relative</string>
     <string name="email">Email</string>
     <string name="next">Next</string>
     <string name="google_requestIdToken">751456404768-4d2026772jh67jk1286mardp0c9dl6kc.apps.googleusercontent.com</string>

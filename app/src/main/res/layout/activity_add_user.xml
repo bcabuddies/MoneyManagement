@@ -9,7 +9,7 @@
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/add_user_topTV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -32,7 +32,7 @@
         app:layout_constraintBottom_toTopOf="@+id/add_user_prevBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/add_user_topTV">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/innerCLayout"
@@ -176,17 +176,26 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/aadhar_card" />
 
                     <TextView
                         android:id="@+id/aadhar_approved_tv"
                         style="@style/CardTextViewStyle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/no"
                         android:textColor="@color/red" />
+
+                    <ImageView
+                        android:id="@+id/add_user_aadhar_imageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/desc"
+                        app:srcCompat="@drawable/round_btn_bg_light" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -208,19 +217,28 @@
                         android:id="@+id/address_tv"
                         style="@style/CardTextViewStyle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/address" />
 
                     <TextView
                         android:id="@+id/address_approved_tv"
                         style="@style/CardTextViewStyle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/no"
                         android:textColor="@color/red" />
+
+                    <ImageView
+                        android:id="@+id/add_user_address_imageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/desc"
+                        app:srcCompat="@drawable/round_btn_bg_light" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -242,19 +260,28 @@
                         android:id="@+id/reference_tv"
                         style="@style/CardTextViewStyle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/reference" />
 
                     <TextView
                         android:id="@+id/reference_approved_tv"
                         style="@style/CardTextViewStyle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/no"
                         android:textColor="@color/red" />
+
+                    <ImageView
+                        android:id="@+id/add_user_reference_imageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/desc"
+                        app:srcCompat="@drawable/round_btn_bg_light" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -278,19 +305,28 @@
                         android:id="@+id/relative_tv"
                         style="@style/CardTextViewStyle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/relative" />
 
                     <TextView
                         android:id="@+id/relative_approved_tv"
                         style="@style/CardTextViewStyle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/no"
                         android:textColor="@color/red" />
+
+                    <ImageView
+                        android:id="@+id/add_user_relative_imageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/desc"
+                        app:srcCompat="@drawable/round_btn_bg_light" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,11 +7,9 @@ import com.bcabuddies.moneymanagement.Model.UsersParcelable;
 public interface AddUserPresenter extends BasePresenter<AddUserView> {
     void getUserData();
 
-    void addPhoto(String type);
-
     void showDatePicker();
 
     void checkDetailsAndSubmit(UsersParcelable parcelable);
 
-    void imagePost(byte[] thumb_byte);
+    void setUserID();
 }

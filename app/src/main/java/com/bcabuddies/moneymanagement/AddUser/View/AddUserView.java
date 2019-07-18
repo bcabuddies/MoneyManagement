@@ -13,4 +13,6 @@ public interface AddUserView extends BaseView {
     void everythingFine();
 
     void showDate(String date);
+
+    void userID(String id);
 }

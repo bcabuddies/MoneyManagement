@@ -24,11 +24,12 @@ public class UsersParcelable implements Parcelable {
     private String address;
     private String reference;
     private String relative;
+    private String userID;
 
     public UsersParcelable() {
     }
 
-    public UsersParcelable(long id, String name, String age, String amount, String intRate, String date, String aadhar, String address, String reference, String relative) {
+    public UsersParcelable(long id, String name, String age, String amount, String intRate, String date, String aadhar, String address, String reference, String relative, String userID) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -39,6 +40,7 @@ public class UsersParcelable implements Parcelable {
         this.address = address;
         this.reference = reference;
         this.relative = relative;
+        this.userID = userID;
     }
 
     public UsersParcelable(Parcel in) {
@@ -52,6 +54,7 @@ public class UsersParcelable implements Parcelable {
         this.address = in.readString();
         this.reference = in.readString();
         this.relative = in.readString();
+        this.userID = in.readString();
     }
 
 
@@ -61,6 +64,14 @@ public class UsersParcelable implements Parcelable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getName() {
@@ -152,12 +163,14 @@ public class UsersParcelable implements Parcelable {
         parcel.writeString(this.address);
         parcel.writeString(this.reference);
         parcel.writeString(this.relative);
+        parcel.writeString(this.userID);
     }
 
     @Override
     public String toString() {
         return "Student{" +
                 "id= " + id +
+                "userID = " + userID +
                 ", name= " + name +
                 ", age= " + age +
                 ", amount= " + amount +

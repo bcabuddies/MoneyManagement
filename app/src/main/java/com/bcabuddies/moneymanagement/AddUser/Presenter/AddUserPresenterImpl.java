@@ -1,17 +1,18 @@
 package com.bcabuddies.moneymanagement.AddUser.Presenter;
 
 import android.app.DatePickerDialog;
-import android.os.Bundle;
 import android.util.Log;
 
-import com.bcabuddies.moneymanagement.AddPhoto.AddPhoto;
 import com.bcabuddies.moneymanagement.AddUser.View.AddUserView;
 import com.bcabuddies.moneymanagement.Model.UsersParcelable;
+import com.bcabuddies.moneymanagement.PreviewUser.View.PreviewUser;
 import com.bcabuddies.moneymanagement.utils.Utils;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 public class AddUserPresenterImpl implements AddUserPresenter {
 
@@ -32,13 +33,6 @@ public class AddUserPresenterImpl implements AddUserPresenter {
     @Override
     public void getUserData() {
 
-    }
-
-    @Override
-    public void addPhoto(String type) {
-        Bundle data = new Bundle();
-        data.putString("type", type);
-        Utils.setIntentExtra(view.getContext(), AddPhoto.class, "data", data);
     }
 
     @Override
@@ -82,10 +76,45 @@ public class AddUserPresenterImpl implements AddUserPresenter {
         if (parcelable.getIntRate().isEmpty())
             view.TextFieldsError("Please Fill Interest", 3);
 
+        if (
+                !parcelable.getName().isEmpty() &&
+                        !parcelable.getName().isEmpty() &&
+                        !parcelable.getName().isEmpty() &&
+                        !parcelable.getName().isEmpty() &&
+                        !parcelable.getName().isEmpty() &&
+                        !parcelable.getName().isEmpty() &&
+                        !parcelable.getName().isEmpty() &&
+                        !parcelable.getName().isEmpty() &&
+                        !parcelable.getName().isEmpty()
+        ) {
+            //all fields and images is filled
+            Log.e(TAG, "checkDetailsAndSubmit: fields are complete " + parcelable.toString());
+            Utils.setIntentParcel(view.getContext(), PreviewUser.class, "data", parcelable);
+        } else {
+            Log.e(TAG, "checkDetailsAndSubmit: error in some field ");
+        }
     }
 
     @Override
-    public void imagePost(byte[] thumb_byte) {
-
+    public void setUserID() {
+        //set a userID for the user
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("Admins")
+                .document("UserID").get().addOnCompleteListener(task -> {
+            if (Objects.requireNonNull(task.getResult()).exists()) {
+                String userID = task.getResult().getString("usedID");
+                Log.e(TAG, "setUserID: userID's from firebase " + userID);
+                int i = 0;
+                assert userID != null;
+                while (userID.contains(String.valueOf(i))) {
+                    i++;
+                }
+                if (!userID.contains(String.valueOf(i))) {
+                    String newUserID = String.valueOf(i);
+                    Log.e(TAG, "setUserID: new user ID = " + newUserID);
+                    view.userID(newUserID);
+                }
+            }
+        });
     }
 }

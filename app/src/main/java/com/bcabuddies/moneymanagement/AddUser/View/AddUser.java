@@ -1,5 +1,6 @@
 package com.bcabuddies.moneymanagement.AddUser.View;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -20,11 +22,13 @@ import com.bcabuddies.moneymanagement.Model.UsersParcelable;
 import com.bcabuddies.moneymanagement.PreviewUser.View.PreviewUser;
 import com.bcabuddies.moneymanagement.R;
 import com.bcabuddies.moneymanagement.utils.Utils;
+import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -34,8 +38,6 @@ import id.zelory.compressor.Compressor;
 
 public class AddUser extends AppCompatActivity implements AddUserView {
 
-    @BindView(R.id.textView)
-    TextView textView;
     @BindView(R.id.add_user_name_textLayout)
     TextInputLayout addUserNameTextLayout;
     @BindView(R.id.add_user_age_textLayout)
@@ -66,18 +68,26 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     CardView addUserRelativeCard;
     @BindView(R.id.add_user_prevBtn)
     Button addUserPrevBtn;
+    final int aadhar_code = 101, address_code = 102, reference_code = 103, relative_code = 104;
+    @BindView(R.id.add_user_topTV)
+    TextView addUserTopTV;
+    @BindView(R.id.add_user_aadhar_imageView)
+    ImageView addUserAadharImageView;
+    @BindView(R.id.add_user_address_imageView)
+    ImageView addUserAddressImageView;
+    @BindView(R.id.add_user_reference_imageView)
+    ImageView addUserReferenceImageView;
 
     private UsersParcelable usersParcelable;
     private AddUserPresenter presenter;
-    public static String aadhar, address, reference, relative;
     private final String YES = "Yes";
-    private final String NO = "No";
     private final String TAG = "AddUser.java";
-    private String name, age, amout, intRate, date;
-
-    final int adhar_code = 101, address_code = 102, reference_code = 103, relative_code = 104;
+    @BindView(R.id.add_user_relative_imageView)
+    ImageView addUserRelativeImageView;
     private Bitmap thumb_Bitmap = null;
+    private String user_id;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +97,8 @@ public class AddUser extends AppCompatActivity implements AddUserView {
         presenter = new AddUserPresenterImpl();
         presenter.attachView(this);
         usersParcelable = new UsersParcelable();
+
+        presenter.setUserID();
     }
 
     @Override
@@ -101,27 +113,23 @@ public class AddUser extends AppCompatActivity implements AddUserView {
                 presenter.showDatePicker();
                 break;
             case R.id.add_user_aadharCard:
-                //presenter.addPhoto("Aadhar");
-                Intent adhar_intent = CropImage.activity()
-                        .setAspectRatio(1, 1).getIntent(getContext());
-                startActivityForResult(adhar_intent, adhar_code);
+                Intent aadhar_intent = CropImage.activity()
+                        .getIntent(getContext());
+                startActivityForResult(aadhar_intent, aadhar_code);
                 break;
             case R.id.add_user_addressCard:
-                //presenter.addPhoto("Address");
                 Intent address_intent = CropImage.activity()
-                        .setAspectRatio(1, 1).getIntent(getContext());
+                        .getIntent(getContext());
                 startActivityForResult(address_intent, address_code);
                 break;
             case R.id.add_user_referenceCard:
-                //presenter.addPhoto("Reference");
                 Intent reference_intent = CropImage.activity()
-                        .setAspectRatio(1, 1).getIntent(getContext());
+                        .getIntent(getContext());
                 startActivityForResult(reference_intent, reference_code);
                 break;
             case R.id.add_user_relativeCard:
-                //presenter.addPhoto("Relative");
                 Intent relative_intent = CropImage.activity()
-                        .setAspectRatio(1, 1).getIntent(getContext());
+                        .getIntent(getContext());
                 startActivityForResult(relative_intent, relative_code);
                 break;
             case R.id.add_user_prevBtn:
@@ -133,42 +141,25 @@ public class AddUser extends AppCompatActivity implements AddUserView {
 
     private void getData() {
         //get data from editTexts
-
         removeErrors();
-
         Log.e(TAG, "getData: clicked ");
-        name = Objects.requireNonNull(addUserNameTextLayout.getEditText()).getText().toString();
-        age = Objects.requireNonNull(addUserAgeTextLayout.getEditText()).getText().toString();
-        amout = Objects.requireNonNull(addUserIntAmtTextLayout.getEditText()).getText().toString();
-        intRate = Objects.requireNonNull(addUserIntPerTextLayout.getEditText()).getText().toString();
-        date = dateShowTv.getText().toString();
+        String name = Objects.requireNonNull(addUserNameTextLayout.getEditText()).getText().toString();
+        String age = Objects.requireNonNull(addUserAgeTextLayout.getEditText()).getText().toString();
+        String amout = Objects.requireNonNull(addUserIntAmtTextLayout.getEditText()).getText().toString();
+        String intRate = Objects.requireNonNull(addUserIntPerTextLayout.getEditText()).getText().toString();
+        String date = dateShowTv.getText().toString();
 
         usersParcelable.setName(name);
         usersParcelable.setAge(age);
         usersParcelable.setAmount(amout);
         usersParcelable.setIntRate(intRate);
         usersParcelable.setDate(date);
-
-        //for testing purpose please change it after testing errors
-        usersParcelable.setAadhar(YES);
-        usersParcelable.setAddress(YES);
-        usersParcelable.setReference(YES);
-        usersParcelable.setRelative(YES);
+        usersParcelable.setUserID(user_id);
 
         aadharApprovedTv.setText(YES);
         addressApprovedTv.setText(YES);
         referenceApprovedTv.setText(YES);
         relativeApprovedTv.setText(YES);
-
-        if (aadharApprovedTv.getText().toString().equals(YES))
-            changeTextAndColor(aadharApprovedTv);
-        if (addressApprovedTv.getText().toString().equals(YES))
-            changeTextAndColor(addressApprovedTv);
-        if (referenceApprovedTv.getText().toString().equals(YES))
-            changeTextAndColor(referenceApprovedTv);
-        if (relativeApprovedTv.getText().toString().equals(YES))
-            changeTextAndColor(relativeApprovedTv);
-
 
         presenter.checkDetailsAndSubmit(usersParcelable);
     }
@@ -234,48 +225,85 @@ public class AddUser extends AppCompatActivity implements AddUserView {
         dateShowTv.setText(date);
     }
 
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void userID(String id) {
+        user_id = id;
+        addUserTopTV.setText("Add user " + user_id);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Uri mainImageUri = null;
-        if (requestCode == adhar_code) {
+        String type = null;
+        if (requestCode == aadhar_code) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 mainImageUri = Objects.requireNonNull(result).getUri();
-                Log.e(TAG, "onActivityResult adhae: " + mainImageUri.toString());
+                type = "aadhar";
+                Glide.with(this).load(mainImageUri).into(addUserAadharImageView);
+                aadharApprovedTv.setText(YES);
+                changeTextAndColor(aadharApprovedTv);
+                Log.e(TAG, "onActivityResult aadhar: " + mainImageUri.toString());
             }
         } else if (requestCode == address_code) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 mainImageUri = Objects.requireNonNull(result).getUri();
+                type = "address";
+                Glide.with(this).load(mainImageUri).into(addUserAddressImageView);
+                addressApprovedTv.setText(YES);
+                changeTextAndColor(addressApprovedTv);
                 Log.e(TAG, "onActivityResult address: " + mainImageUri.toString());
             }
         } else if (requestCode == reference_code) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 mainImageUri = Objects.requireNonNull(result).getUri();
+                type = "reference";
+                Glide.with(this).load(mainImageUri).into(addUserReferenceImageView);
+                referenceApprovedTv.setText(YES);
+                changeTextAndColor(referenceApprovedTv);
                 Log.e(TAG, "onActivityResult reference: " + mainImageUri.toString());
             }
         } else if (requestCode == relative_code) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 mainImageUri = Objects.requireNonNull(result).getUri();
+                type = "relative";
+                Glide.with(this).load(mainImageUri).into(addUserRelativeImageView);
+                relativeApprovedTv.setText(YES);
+                changeTextAndColor(relativeApprovedTv);
                 Log.e(TAG, "onActivityResult relative: " + mainImageUri.toString());
             }
         }
         if (mainImageUri != null) {
-            File thumb_filePathUri = new File(mainImageUri.getPath());
+            File thumb_filePathUri = new File(Objects.requireNonNull(mainImageUri.getPath()));
             try {
-                thumb_Bitmap = new Compressor(this).setMaxWidth(400).setMaxHeight(400).setQuality(50).compressToBitmap(thumb_filePathUri);
+                thumb_Bitmap = new Compressor(this).setQuality(50).compressToBitmap(thumb_filePathUri);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             thumb_Bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
             byte[] thumb_byte = byteArrayOutputStream.toByteArray();            //upload this on firebase storage
-            Log.e(TAG, "onActivityResult: thumb_byte" + thumb_byte.toString());
-            presenter.imagePost(thumb_byte);
-        } else if (mainImageUri == null) {
+            Log.e(TAG, "onActivityResult: thumb_byte" + Arrays.toString(thumb_byte));
+            switch (type) {
+                case "aadhar":
+                    usersParcelable.setAadhar(Arrays.toString(thumb_byte));
+                    break;
+                case "address":
+                    usersParcelable.setAddress(Arrays.toString(thumb_byte));
+                    break;
+                case "reference":
+                    usersParcelable.setReference(Arrays.toString(thumb_byte));
+                    break;
+                case "relative":
+                    usersParcelable.setRelative(Arrays.toString(thumb_byte));
+                    break;
+            }
+        } else {
             Utils.showMessage(this, "Please select an image");
         }
     }

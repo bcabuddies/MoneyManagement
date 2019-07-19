@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bcabuddies.moneymanagement.AddUser.Presenter.AddUserPresenter;
 import com.bcabuddies.moneymanagement.AddUser.Presenter.AddUserPresenterImpl;
@@ -49,23 +49,23 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     @BindView(R.id.date_show_tv)
     TextView dateShowTv;
     @BindView(R.id.add_user_date_card)
-    CardView addUserDateCard;
+    ConstraintLayout addUserDateCard;
     @BindView(R.id.aadhar_approved_tv)
     TextView aadharApprovedTv;
     @BindView(R.id.add_user_aadharCard)
-    CardView addUserAadharCard;
+    ConstraintLayout addUserAadharCard;
     @BindView(R.id.address_approved_tv)
     TextView addressApprovedTv;
     @BindView(R.id.add_user_addressCard)
-    CardView addUserAddressCard;
+    ConstraintLayout addUserAddressCard;
     @BindView(R.id.reference_approved_tv)
     TextView referenceApprovedTv;
     @BindView(R.id.add_user_referenceCard)
-    CardView addUserReferenceCard;
+    ConstraintLayout addUserReferenceCard;
     @BindView(R.id.relative_approved_tv)
     TextView relativeApprovedTv;
     @BindView(R.id.add_user_relativeCard)
-    CardView addUserRelativeCard;
+    ConstraintLayout addUserRelativeCard;
     @BindView(R.id.add_user_prevBtn)
     Button addUserPrevBtn;
     final int aadhar_code = 101, address_code = 102, reference_code = 103, relative_code = 104;
@@ -241,8 +241,12 @@ public class AddUser extends AppCompatActivity implements AddUserView {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 mainImageUri = Objects.requireNonNull(result).getUri();
-                type = "aadhar";
                 Glide.with(this).load(mainImageUri).into(addUserAadharImageView);
+                if (mainImageUri!=null){
+                    byte[] final_thumb_byte =compressImage(mainImageUri);
+                    usersParcelable.setAadhar(Arrays.toString(final_thumb_byte));
+                }
+                //type = "aadhar";
                 aadharApprovedTv.setText(YES);
                 changeTextAndColor(aadharApprovedTv);
                 Log.e(TAG, "onActivityResult aadhar: " + mainImageUri.toString());
@@ -251,8 +255,12 @@ public class AddUser extends AppCompatActivity implements AddUserView {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 mainImageUri = Objects.requireNonNull(result).getUri();
-                type = "address";
                 Glide.with(this).load(mainImageUri).into(addUserAddressImageView);
+                if (mainImageUri!=null){
+                    byte[] final_thumb_byte =compressImage(mainImageUri);
+                    usersParcelable.setAddress(Arrays.toString(final_thumb_byte));
+                }
+               // type = "address";
                 addressApprovedTv.setText(YES);
                 changeTextAndColor(addressApprovedTv);
                 Log.e(TAG, "onActivityResult address: " + mainImageUri.toString());
@@ -261,8 +269,12 @@ public class AddUser extends AppCompatActivity implements AddUserView {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 mainImageUri = Objects.requireNonNull(result).getUri();
-                type = "reference";
                 Glide.with(this).load(mainImageUri).into(addUserReferenceImageView);
+                if (mainImageUri!=null){
+                    byte[] final_thumb_byte =compressImage(mainImageUri);
+                    usersParcelable.setReference(Arrays.toString(final_thumb_byte));
+                }
+                //type = "reference";
                 referenceApprovedTv.setText(YES);
                 changeTextAndColor(referenceApprovedTv);
                 Log.e(TAG, "onActivityResult reference: " + mainImageUri.toString());
@@ -271,13 +283,21 @@ public class AddUser extends AppCompatActivity implements AddUserView {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 mainImageUri = Objects.requireNonNull(result).getUri();
-                type = "relative";
                 Glide.with(this).load(mainImageUri).into(addUserRelativeImageView);
+                if (mainImageUri!=null){
+                    byte[] final_thumb_byte =compressImage(mainImageUri);
+                    usersParcelable.setRelative(Arrays.toString(final_thumb_byte));
+                }
+                //type = "relative";
                 relativeApprovedTv.setText(YES);
                 changeTextAndColor(relativeApprovedTv);
                 Log.e(TAG, "onActivityResult relative: " + mainImageUri.toString());
             }
         }
+
+    }
+
+    private byte[] compressImage(Uri mainImageUri) {
         if (mainImageUri != null) {
             File thumb_filePathUri = new File(Objects.requireNonNull(mainImageUri.getPath()));
             try {
@@ -289,7 +309,8 @@ public class AddUser extends AppCompatActivity implements AddUserView {
             thumb_Bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
             byte[] thumb_byte = byteArrayOutputStream.toByteArray();            //upload this on firebase storage
             Log.e(TAG, "onActivityResult: thumb_byte" + Arrays.toString(thumb_byte));
-            switch (type) {
+            return thumb_byte;
+         /*   switch (type) {
                 case "aadhar":
                     usersParcelable.setAadhar(Arrays.toString(thumb_byte));
                     break;
@@ -302,9 +323,12 @@ public class AddUser extends AppCompatActivity implements AddUserView {
                 case "relative":
                     usersParcelable.setRelative(Arrays.toString(thumb_byte));
                     break;
-            }
+            }*/
+
         } else {
             Utils.showMessage(this, "Please select an image");
         }
+
+        return new byte[0];
     }
 }

@@ -9,9 +9,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bcabuddies.moneymanagement.AddUser.View.AddUser;
+import com.bcabuddies.moneymanagement.Home.Adapter.HomeAdapter;
+import com.bcabuddies.moneymanagement.Home.Presenter.HomePresenter;
+import com.bcabuddies.moneymanagement.Home.Presenter.HomePresenterImp;
+import com.bcabuddies.moneymanagement.Model.UserModel;
 import com.bcabuddies.moneymanagement.R;
 import com.bcabuddies.moneymanagement.utils.Utils;
 import com.bumptech.glide.Glide;
@@ -19,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -41,8 +47,12 @@ public class Home extends AppCompatActivity implements HomeView {
     TextView homeNameView;
     @BindView(R.id.home_logOut_btn)
     Button homeLogOutBtn;
+
     private FirebaseUser user;
     private FirebaseFirestore firestore;
+    private ArrayList<UserModel> userList;
+    private HomeAdapter adapter;
+    private HomePresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +83,18 @@ public class Home extends AppCompatActivity implements HomeView {
     }
 
     private void init() {
+        presenter = new HomePresenterImp();
+        presenter.attachView(this);
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         firestore = FirebaseFirestore.getInstance();
+
+        userList = new ArrayList<>();
+        presenter.getUser();
+
+        adapter = new HomeAdapter(userList);
+        homeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        homeRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -92,5 +112,11 @@ public class Home extends AppCompatActivity implements HomeView {
                 Utils.googleSignOut(this);
                 break;
         }
+    }
+
+    @Override
+    public void setUserList(UserModel user) {
+        userList.add(user);
+        adapter.notifyDataSetChanged();
     }
 }

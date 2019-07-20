@@ -14,7 +14,7 @@ TODO 09.07.19
        *a)* Create Home and MVP
        *b)* Only admins can login - admin emails in database at "Admins/AdminEmails/email"
        *c)* Add new user button
-        d) Show users on Home Screen
+       *d)* Show users on Home Screen
        *e) LOG OUT button is for test need to change and put it to a : menu after testing
 4. AddUser -
        *a)* Create AddUser and MVP
@@ -25,6 +25,7 @@ TODO 09.07.19
        *f)* Fields showing errors if not filled
        *g)* DatePicker is working
        *h)* Data is passing with Parcel to Presenter
+        i) Add option to Add user's Phone
 5. PreviewUser -
        *a)* Data coming from Parcel
        *b)* Data showing on Fields and Views

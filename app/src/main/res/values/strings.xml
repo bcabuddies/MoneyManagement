@@ -24,4 +24,7 @@
     <string name="upload">upload</string>
     <string name="data">DATA</string>
     <string name="documents">Documents</string>
+    <string name="amount">Amount</string>
+    <string name="rate">Rate</string>
+    <string name="rupee_symbol">₹</string>
 </resources>

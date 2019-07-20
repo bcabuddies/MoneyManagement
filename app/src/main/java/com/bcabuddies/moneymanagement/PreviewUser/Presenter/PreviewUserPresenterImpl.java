@@ -111,6 +111,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
         userMap.put("amount", parcelable.getAmount());
         userMap.put("rate", parcelable.getIntRate());
         userMap.put("date", parcelable.getDate());
+        userMap.put("userID", parcelable.getUserID());
 
         Log.e(TAG, "submitData: userMap " + userMap);
 

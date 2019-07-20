@@ -5,7 +5,6 @@ import com.bcabuddies.moneymanagement.Base.BasePresenter;
 import com.bcabuddies.moneymanagement.Model.UsersParcelable;
 
 public interface AddUserPresenter extends BasePresenter<AddUserView> {
-    void getUserData();
 
     void showDatePicker();
 

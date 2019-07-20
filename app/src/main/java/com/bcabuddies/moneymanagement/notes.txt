@@ -16,16 +16,24 @@ TODO 09.07.19
        *c)* Add new user button
         d) Show users on Home Screen
        *e) LOG OUT button is for test need to change and put it to a : menu after testing
-6. AddUser -
+4. AddUser -
        *a)* Create AddUser and MVP
-       *b) Layouts
-       *c) Admins can add users details
-        d) Admins can upload photos like - AADHAR, PAN, etc.
-       *e) All "compulsory" details should be complete before adding user to database
+       *b)* Layouts
+       *c)* Admins can add users details
+       *d)* Admins can upload photos like - AADHAR, PAN, etc.
+       *e)* All "compulsory" details should be complete before adding user to database
        *f)* Fields showing errors if not filled
        *g)* DatePicker is working
        *h)* Data is passing with Parcel to Presenter
-5. UserActivity -
+5. PreviewUser -
+       *a)* Data coming from Parcel
+       *b)* Data showing on Fields and Views
+       *c)* GridView for pictures
+       *d)* MVP of PreviewUser
+       *e)* Data upload to Firebase
+       *f)* Files upload to Storage
+       *g) Auto userID increment
+6. UserActivity -
         a) create UserActivity and MVP
         b) open UserActivity when clicking userCard
         c) show user details

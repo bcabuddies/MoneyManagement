@@ -2,6 +2,7 @@ package com.bcabuddies.moneymanagement.AddUser.Presenter;
 
 import android.app.DatePickerDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bcabuddies.moneymanagement.AddUser.View.AddUserView;
 import com.bcabuddies.moneymanagement.Model.UsersParcelable;
@@ -28,11 +29,6 @@ public class AddUserPresenterImpl implements AddUserPresenter {
     @Override
     public void detachView() {
         view = null;
-    }
-
-    @Override
-    public void getUserData() {
-
     }
 
     @Override
@@ -78,20 +74,21 @@ public class AddUserPresenterImpl implements AddUserPresenter {
 
         if (
                 !parcelable.getName().isEmpty() &&
-                        !parcelable.getName().isEmpty() &&
-                        !parcelable.getName().isEmpty() &&
-                        !parcelable.getName().isEmpty() &&
-                        !parcelable.getName().isEmpty() &&
-                        !parcelable.getName().isEmpty() &&
-                        !parcelable.getName().isEmpty() &&
-                        !parcelable.getName().isEmpty() &&
-                        !parcelable.getName().isEmpty()
+                        !parcelable.getAge().isEmpty() &&
+                        !parcelable.getAmount().isEmpty() &&
+                        !parcelable.getIntRate().isEmpty() &&
+                        parcelable.getAddress() != null &&
+                        parcelable.getAadhar() != null &&
+                        !parcelable.getDate().isEmpty() &&
+                        parcelable.getReference() != null &&
+                        parcelable.getRelative() != null
         ) {
             //all fields and images is filled
             Log.e(TAG, "checkDetailsAndSubmit: fields are complete " + parcelable.toString());
             Utils.setIntentParcel(view.getContext(), PreviewUser.class, "data", parcelable);
         } else {
             Log.e(TAG, "checkDetailsAndSubmit: error in some field ");
+            Toast.makeText(view.getContext(), "Please add all Images", Toast.LENGTH_SHORT).show();
         }
     }
 

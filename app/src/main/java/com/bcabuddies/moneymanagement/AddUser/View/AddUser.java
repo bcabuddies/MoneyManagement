@@ -3,7 +3,6 @@ package com.bcabuddies.moneymanagement.AddUser.View;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,22 +18,17 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.bcabuddies.moneymanagement.AddUser.Presenter.AddUserPresenter;
 import com.bcabuddies.moneymanagement.AddUser.Presenter.AddUserPresenterImpl;
 import com.bcabuddies.moneymanagement.Model.UsersParcelable;
-import com.bcabuddies.moneymanagement.PreviewUser.View.PreviewUser;
 import com.bcabuddies.moneymanagement.R;
 import com.bcabuddies.moneymanagement.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 import com.theartofdev.edmodo.cropper.CropImage;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.Arrays;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import id.zelory.compressor.Compressor;
 
 public class AddUser extends AppCompatActivity implements AddUserView {
 
@@ -84,7 +78,7 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     private final String TAG = "AddUser.java";
     @BindView(R.id.add_user_relative_imageView)
     ImageView addUserRelativeImageView;
-    private Bitmap thumb_Bitmap = null;
+
     private String user_id;
 
     @SuppressLint("SetTextI18n")
@@ -206,21 +200,6 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     }
 
     @Override
-    public void pictureError(String error) {
-        Utils.showMessage(this, error);
-    }
-
-    @Override
-    public void dataForParcel(UsersParcelable usersParcelable) {
-        this.usersParcelable = usersParcelable;
-    }
-
-    @Override
-    public void everythingFine() {
-        Utils.setIntentParcel(this, PreviewUser.class, "User", usersParcelable);
-    }
-
-    @Override
     public void showDate(String date) {
         dateShowTv.setText(date);
     }
@@ -235,20 +214,19 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Uri mainImageUri = null;
-        String type = null;
+        Uri mainImageUri;
         if (requestCode == aadhar_code) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 mainImageUri = Objects.requireNonNull(result).getUri();
                 Glide.with(this).load(mainImageUri).into(addUserAadharImageView);
-                if (mainImageUri!=null){
-                    byte[] final_thumb_byte =compressImage(mainImageUri);
-                    usersParcelable.setAadhar(Arrays.toString(final_thumb_byte));
+                if (mainImageUri != null) {
+                    usersParcelable.setAadhar(mainImageUri.toString());
                 }
                 //type = "aadhar";
                 aadharApprovedTv.setText(YES);
                 changeTextAndColor(aadharApprovedTv);
+                assert mainImageUri != null;
                 Log.e(TAG, "onActivityResult aadhar: " + mainImageUri.toString());
             }
         } else if (requestCode == address_code) {
@@ -256,13 +234,13 @@ public class AddUser extends AppCompatActivity implements AddUserView {
             if (resultCode == RESULT_OK) {
                 mainImageUri = Objects.requireNonNull(result).getUri();
                 Glide.with(this).load(mainImageUri).into(addUserAddressImageView);
-                if (mainImageUri!=null){
-                    byte[] final_thumb_byte =compressImage(mainImageUri);
-                    usersParcelable.setAddress(Arrays.toString(final_thumb_byte));
+                if (mainImageUri != null) {
+                    usersParcelable.setAddress(mainImageUri.toString());
                 }
-               // type = "address";
+                // type = "address";
                 addressApprovedTv.setText(YES);
                 changeTextAndColor(addressApprovedTv);
+                assert mainImageUri != null;
                 Log.e(TAG, "onActivityResult address: " + mainImageUri.toString());
             }
         } else if (requestCode == reference_code) {
@@ -270,13 +248,13 @@ public class AddUser extends AppCompatActivity implements AddUserView {
             if (resultCode == RESULT_OK) {
                 mainImageUri = Objects.requireNonNull(result).getUri();
                 Glide.with(this).load(mainImageUri).into(addUserReferenceImageView);
-                if (mainImageUri!=null){
-                    byte[] final_thumb_byte =compressImage(mainImageUri);
-                    usersParcelable.setReference(Arrays.toString(final_thumb_byte));
+                if (mainImageUri != null) {
+                    usersParcelable.setReference(mainImageUri.toString());
                 }
                 //type = "reference";
                 referenceApprovedTv.setText(YES);
                 changeTextAndColor(referenceApprovedTv);
+                assert mainImageUri != null;
                 Log.e(TAG, "onActivityResult reference: " + mainImageUri.toString());
             }
         } else if (requestCode == relative_code) {
@@ -284,51 +262,16 @@ public class AddUser extends AppCompatActivity implements AddUserView {
             if (resultCode == RESULT_OK) {
                 mainImageUri = Objects.requireNonNull(result).getUri();
                 Glide.with(this).load(mainImageUri).into(addUserRelativeImageView);
-                if (mainImageUri!=null){
-                    byte[] final_thumb_byte =compressImage(mainImageUri);
-                    usersParcelable.setRelative(Arrays.toString(final_thumb_byte));
+                if (mainImageUri != null) {
+                    usersParcelable.setRelative(mainImageUri.toString());
                 }
                 //type = "relative";
                 relativeApprovedTv.setText(YES);
                 changeTextAndColor(relativeApprovedTv);
+                assert mainImageUri != null;
                 Log.e(TAG, "onActivityResult relative: " + mainImageUri.toString());
             }
         }
 
-    }
-
-    private byte[] compressImage(Uri mainImageUri) {
-        if (mainImageUri != null) {
-            File thumb_filePathUri = new File(Objects.requireNonNull(mainImageUri.getPath()));
-            try {
-                thumb_Bitmap = new Compressor(this).setQuality(50).compressToBitmap(thumb_filePathUri);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            thumb_Bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
-            byte[] thumb_byte = byteArrayOutputStream.toByteArray();            //upload this on firebase storage
-            Log.e(TAG, "onActivityResult: thumb_byte" + Arrays.toString(thumb_byte));
-            return thumb_byte;
-         /*   switch (type) {
-                case "aadhar":
-                    usersParcelable.setAadhar(Arrays.toString(thumb_byte));
-                    break;
-                case "address":
-                    usersParcelable.setAddress(Arrays.toString(thumb_byte));
-                    break;
-                case "reference":
-                    usersParcelable.setReference(Arrays.toString(thumb_byte));
-                    break;
-                case "relative":
-                    usersParcelable.setRelative(Arrays.toString(thumb_byte));
-                    break;
-            }*/
-
-        } else {
-            Utils.showMessage(this, "Please select an image");
-        }
-
-        return new byte[0];
     }
 }

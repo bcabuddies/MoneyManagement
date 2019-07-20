@@ -22,4 +22,6 @@
     <string name="desc">desc</string>
     <string name="add_photo">Add Photo</string>
     <string name="upload">upload</string>
+    <string name="data">DATA</string>
+    <string name="documents">Documents</string>
 </resources>

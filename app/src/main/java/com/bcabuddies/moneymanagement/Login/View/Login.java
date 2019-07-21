@@ -32,6 +32,8 @@ public class Login extends AppCompatActivity implements LoginView {
     private static final int RC_SIGN_IN = 1;
     private loginPresenter loginPresenter;
     private String fName, profUrl, email;
+    private FirebaseAuth.AuthStateListener authStateListener;
+    FirebaseAuth auth;
 
 
     @Override
@@ -39,12 +41,13 @@ public class Login extends AppCompatActivity implements LoginView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
         Button googleLoginBtn = findViewById(R.id.welcome_googlebtn);
         loginPresenter = new LoginPresenterImp(auth);
         loginPresenter.attachView(this);
 
         loginPresenter.checkLogin();
+        checkLogin();
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -55,6 +58,21 @@ public class Login extends AppCompatActivity implements LoginView {
 
         googleLoginBtn.setOnClickListener(v -> GoogleLogin());
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(authStateListener);
+    }
+
+    private void checkLogin() {
+        authStateListener = firebaseAuth -> {
+            if (firebaseAuth.getCurrentUser() != null) {
+                Utils.setIntentNoBackLog(this, Home.class);
+                finish();
+            }
+        };
     }
 
     @Override

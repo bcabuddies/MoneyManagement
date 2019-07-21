@@ -9,7 +9,10 @@ import android.widget.Toast;
 
 import com.bcabuddies.moneymanagement.Model.UsersParcelable;
 import com.bcabuddies.moneymanagement.PreviewUser.View.PreviewUserView;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -19,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
+
+import javax.annotation.Nullable;
 
 import id.zelory.compressor.Compressor;
 
@@ -30,6 +35,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
     private Bitmap thumb_Bitmap = null;
     private String downloadURL = null;
     private HashMap<String, Object> userMap = new HashMap<>();
+    int cusotmerID=1;
 
     public PreviewUserPresenterImpl(UsersParcelable parcelable) {
         this.parcelable = parcelable;
@@ -116,25 +122,37 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
         Log.e(TAG, "submitData: userMap " + userMap);
 
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("Customers").document(userID)
+
+        firestore.collection("Customers").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (!queryDocumentSnapshots.isEmpty()){
+                    cusotmerID=queryDocumentSnapshots.size()+1;
+                    Log.e(TAG, "onEvent: cusrtomer count"+cusotmerID );
+                }
+            }
+        });
+
+        firestore.collection("Customers").document(String.valueOf(cusotmerID))
                 .set(userMap)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         view.everythingDone();
                     } else {
-                        Log.e(TAG, "submitData: error uploading data " + Objects.requireNonNull(task.getException()).getMessage());
+                        Log.e(TAG, "submitData: error uploading data set" + Objects.requireNonNull(task.getException()).getMessage());
                         view.errorMsg("Some Error, Please try again!");
                     }
                 });
     }
 
     private void uploadImage(StorageReference storageReference, String userID, byte[] image, String name) {
-        StorageReference uploadFile = storageReference.child("Customers/" + userID + "/" + name + ".jpg");
+        StorageReference uploadFile = storageReference.child("Customers/" + cusotmerID + "/" + name + ".jpg");
         uploadFile.putBytes(image)
                 .addOnSuccessListener(taskSnapshot -> uploadFile.getDownloadUrl().addOnSuccessListener(uri -> {
                     downloadURL = uri.toString();
                     HashMap<String, Object> updateMap = new HashMap<>();
                     updateMap.put(name, downloadURL);
+                    Log.e(TAG, "uploadImage: custid"+cusotmerID );
                     updateFirebase(userID, updateMap, name);
                 }))
                 .addOnFailureListener(runnable -> Log.e(TAG, "uploadImage: exception " + runnable.getMessage()))
@@ -143,7 +161,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
 
     private void updateFirebase(String userID, HashMap<String, Object> updateMap, String name) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("Customers").document(userID)
+        firestore.collection("Customers").document(String.valueOf(cusotmerID))
                 .update(updateMap)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -154,6 +172,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
                         view.errorMsg("Some Error, Please try again!");
                     }
                 });
+
     }
 
     private void incrementUserID(String userID) {

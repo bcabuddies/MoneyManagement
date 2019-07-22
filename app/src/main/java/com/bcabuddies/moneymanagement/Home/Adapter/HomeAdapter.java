@@ -1,6 +1,8 @@
 package com.bcabuddies.moneymanagement.Home.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bcabuddies.moneymanagement.Model.UserModel;
 import com.bcabuddies.moneymanagement.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Objects;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
-    private static Context context;
+    private final String TAG = "HomeAdapter";
     private ArrayList<UserModel> userList;
+    private Context context;
 
     public HomeAdapter(ArrayList<UserModel> userList) {
         this.userList = userList;
@@ -32,17 +39,52 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String name = userList.get(position).getName();
         String date = userList.get(position).getDate();
-        String amount = userList.get(position).getAmount() + context.getString(R.string.rupee_symbol);
-        String intAmount = userList.get(position).getRate() + "%";
+        String amount = userList.get(position).getAmount();
+        String intAmount = userList.get(position).getRate();
+
+        /*
+            String dt = "2008-01-01";  // Start date
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar c = Calendar.getInstance();
+            c.setTime(sdf.parse(dt));
+            c.add(Calendar.DATE, 1);  // number of days to add
+            dt = sdf.format(c.getTime());  // dt is now the new date
+        */
+
+        //to calculate next Date
+        try {
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+            Calendar c = Calendar.getInstance();
+            c.setTime(Objects.requireNonNull(sdf.parse(date)));
+            c.add(Calendar.MONTH, 1);
+            date = sdf.format(c.getTime());
+            Log.e(TAG, "onBindViewHolder: new date = " + date);
+            holder.dateTV.setText(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e(TAG, "onBindViewHolder: exception in date " + e.getMessage());
+        }
+
+        //to calculate next amount
+        // P * R * T
+        // P = remaining amount
+        // R = rate
+        // T = time in months
+        double p = Double.parseDouble(amount);
+        double r = Double.parseDouble(intAmount);
+        double t = 0.083; //for show taking 1/12 calculating only for 1 month
+        int result = (int) (p * r * t);
+        Log.e(TAG, "onBindViewHolder: p " + p + " r " + r + " t " + t + " res " + result);
 
         holder.nameTV.setText(name);
-        holder.dateTV.setText(date);
-        holder.amountTV.setText(amount);
-        holder.intAmountTV.setText(intAmount);
+        holder.amountLeftTV.setText(amount + context.getString(R.string.rupee_symbol));
+        holder.amountTV.setText(result + context.getString(R.string.rupee_symbol));
+        holder.intAmountTV.setText(intAmount + "%");
     }
 
     @Override
@@ -52,7 +94,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView nameTV, dateTV, amountTV, intAmountTV;
+        private TextView nameTV, dateTV, amountTV, intAmountTV, amountLeftTV;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,6 +102,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             dateTV = itemView.findViewById(R.id.home_item_dateTV);
             amountTV = itemView.findViewById(R.id.home_item_amountTV);
             intAmountTV = itemView.findViewById(R.id.home_item_rateTV);
+            amountLeftTV = itemView.findViewById(R.id.home_item_amountLeftTV);
         }
     }
 }

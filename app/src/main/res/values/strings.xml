@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Money Management v1</string>
     <string name="add_user">Add user</string>
     <string name="name">Name</string>
@@ -16,7 +16,7 @@
     <string name="relative">User Relative</string>
     <string name="email">Email</string>
     <string name="next">Next</string>
-    <string name="google_requestIdToken">751456404768-4d2026772jh67jk1286mardp0c9dl6kc.apps.googleusercontent.com</string>
+    <string name="google_requestIdToken" tools:ignore="TypographyDashes">751456404768-4d2026772jh67jk1286mardp0c9dl6kc.apps.googleusercontent.com</string>
     <string name="log_out">Log Out</string>
     <string name="submit">Submit</string>
     <string name="desc">desc</string>
@@ -28,4 +28,7 @@
     <string name="rate">Rate</string>
     <string name="rupee_symbol">₹</string>
     <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="next_amount">Next</string>
+    <string name="amount_left">Total</string>
+    <string name="next_date">Next Date</string>
 </resources>

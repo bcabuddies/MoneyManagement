@@ -46,7 +46,7 @@ public class AddUserPresenterImpl implements AddUserPresenter {
     }
 
     private void updateLabel() {
-        String myFormat = "dd/MM/yy"; //In which you need put here
+        String myFormat = "dd/MM/yy"; //In which style you want the date to show
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         String date = sdf.format(myCalendar.getTime());
         view.showDate(date);

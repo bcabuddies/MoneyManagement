@@ -31,4 +31,5 @@
     <string name="next_amount">Next</string>
     <string name="amount_left">Total</string>
     <string name="next_date">Next Date</string>
+    <string name="userid">UserID</string>
 </resources>

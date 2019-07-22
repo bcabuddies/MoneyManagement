@@ -2,6 +2,7 @@ package com.bcabuddies.moneymanagement.Home.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +10,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bcabuddies.moneymanagement.Model.UserModel;
 import com.bcabuddies.moneymanagement.R;
+import com.bcabuddies.moneymanagement.ViewUser.View.ViewUser;
+import com.bcabuddies.moneymanagement.utils.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,7 +26,6 @@ import java.util.Objects;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
-    private final String TAG = "HomeAdapter";
     private ArrayList<UserModel> userList;
     private Context context;
 
@@ -46,6 +49,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         String date = userList.get(position).getDate();
         String amount = userList.get(position).getAmount();
         String intAmount = userList.get(position).getRate();
+        String uid = userList.get(position).UserModelID;
 
         /*
             String dt = "2008-01-01";  // Start date
@@ -57,6 +61,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         */
 
         //to calculate next Date
+        String TAG = "HomeAdapter";
         try {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
             Calendar c = Calendar.getInstance();
@@ -85,6 +90,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         holder.amountLeftTV.setText(amount + context.getString(R.string.rupee_symbol));
         holder.amountTV.setText(result + context.getString(R.string.rupee_symbol));
         holder.intAmountTV.setText(intAmount + "%");
+        holder.userIdTV.setText(uid);
+
+        Bundle data = new Bundle();
+        data.putString("uid", uid);
+        data.putString("result", String.valueOf(result));
+        data.putString("nextDate", date);
+
+        holder.userCard.setOnClickListener(view -> Utils.setIntentExtra(context, ViewUser.class, "data", data));
     }
 
     @Override
@@ -94,7 +107,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView nameTV, dateTV, amountTV, intAmountTV, amountLeftTV;
+        private TextView nameTV, dateTV, amountTV, intAmountTV, amountLeftTV, userIdTV;
+        private CardView userCard;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,6 +117,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             amountTV = itemView.findViewById(R.id.home_item_amountTV);
             intAmountTV = itemView.findViewById(R.id.home_item_rateTV);
             amountLeftTV = itemView.findViewById(R.id.home_item_amountLeftTV);
+            userIdTV = itemView.findViewById(R.id.home_item_userTV);
+            userCard = itemView.findViewById(R.id.home_item_cardView);
         }
     }
 }

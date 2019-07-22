@@ -25,11 +25,12 @@ public class UsersParcelable implements Parcelable {
     private String reference;
     private String relative;
     private String userID;
+    private String phone;
 
     public UsersParcelable() {
     }
 
-    public UsersParcelable(long id, String name, String age, String amount, String intRate, String date, String aadhar, String address, String reference, String relative, String userID) {
+    public UsersParcelable(long id, String name, String age, String amount, String intRate, String date, String aadhar, String address, String reference, String relative, String userID, String phone) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -41,6 +42,7 @@ public class UsersParcelable implements Parcelable {
         this.reference = reference;
         this.relative = relative;
         this.userID = userID;
+        this.phone = phone;
     }
 
     public UsersParcelable(Parcel in) {
@@ -55,8 +57,8 @@ public class UsersParcelable implements Parcelable {
         this.reference = in.readString();
         this.relative = in.readString();
         this.userID = in.readString();
+        this.phone = in.readString();
     }
-
 
     public long getId() {
         return id;
@@ -146,6 +148,14 @@ public class UsersParcelable implements Parcelable {
         this.relative = relative;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -164,6 +174,7 @@ public class UsersParcelable implements Parcelable {
         parcel.writeString(this.reference);
         parcel.writeString(this.relative);
         parcel.writeString(this.userID);
+        parcel.writeString(this.phone);
     }
 
     @Override
@@ -175,6 +186,7 @@ public class UsersParcelable implements Parcelable {
                 ", age= " + age +
                 ", amount= " + amount +
                 ", intRate= " + intRate +
+                ", phone= " + phone +
                 ", date= " + date +
                 ", aadhar= " + aadhar +
                 ", address= " + address +

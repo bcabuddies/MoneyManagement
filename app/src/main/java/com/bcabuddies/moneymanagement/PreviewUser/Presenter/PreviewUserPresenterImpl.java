@@ -5,14 +5,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bcabuddies.moneymanagement.Model.UsersParcelable;
 import com.bcabuddies.moneymanagement.PreviewUser.View.PreviewUserView;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -22,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
-
-import javax.annotation.Nullable;
 
 import id.zelory.compressor.Compressor;
 
@@ -35,7 +29,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
     private Bitmap thumb_Bitmap = null;
     private String downloadURL = null;
     private HashMap<String, Object> userMap = new HashMap<>();
-    int cusotmerID=1;
+    private String customerID;
 
     public PreviewUserPresenterImpl(UsersParcelable parcelable) {
         this.parcelable = parcelable;
@@ -60,6 +54,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
                         "Age: " + "\n" +
                         "Amount: " + "\n" +
                         "Rate: " + "\n" +
+                        "Phone: " + "\n" +
                         "Date: "
         );
         previewDataTV.setText(
@@ -68,6 +63,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
                         parcelable.getAge() + "\n" +
                         parcelable.getAmount() + "\n" +
                         parcelable.getIntRate() + "%\n" +
+                        parcelable.getPhone() + "\n" +
                         parcelable.getDate()
         );
     }
@@ -92,7 +88,6 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
 
     @Override
     public void submitData(ArrayList<String> imageList) {
-        //byte[] final_thumb_byte =compressImage(mainImageUri);
         /*
             imageList.get(0) = Aadhar
             imageList.get(1) = Address
@@ -104,39 +99,32 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
         byte[] reference = compressImage(Uri.parse(imageList.get(2)));
         byte[] relative = compressImage(Uri.parse(imageList.get(3)));
 
-        String userID = parcelable.getUserID();
-
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        uploadImage(storageReference, userID, aadhar, "aadhar");
-        uploadImage(storageReference, userID, address, "address");
-        uploadImage(storageReference, userID, reference, "reference");
-        uploadImage(storageReference, userID, relative, "relative");
+        uploadImage(storageReference, aadhar, "aadhar");
+        uploadImage(storageReference, address, "address");
+        uploadImage(storageReference, reference, "reference");
+        uploadImage(storageReference, relative, "relative");
+
+        customerID = parcelable.getUserID();
 
         userMap.put("name", parcelable.getName());
         userMap.put("age", parcelable.getAge());
         userMap.put("amount", parcelable.getAmount());
         userMap.put("rate", parcelable.getIntRate());
         userMap.put("date", parcelable.getDate());
-        userMap.put("userID", parcelable.getUserID());
+        userMap.put("phone", parcelable.getPhone());
+        userMap.put("userID", customerID);
 
         Log.e(TAG, "submitData: userMap " + userMap);
 
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-        firestore.collection("Customers").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (!queryDocumentSnapshots.isEmpty()){
-                    cusotmerID=queryDocumentSnapshots.size()+1;
-                    Log.e(TAG, "onEvent: cusrtomer count"+cusotmerID );
-                }
-            }
-        });
-
-        firestore.collection("Customers").document(String.valueOf(cusotmerID))
+        firestore.collection("Customers").document(String.valueOf(customerID))
                 .set(userMap)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        Log.e(TAG, "submitData: customer user ID = " + customerID);
+                        Log.e(TAG, "submitData: data uploaded on firestore ");
                         view.everythingDone();
                     } else {
                         Log.e(TAG, "submitData: error uploading data set" + Objects.requireNonNull(task.getException()).getMessage());
@@ -145,28 +133,29 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
                 });
     }
 
-    private void uploadImage(StorageReference storageReference, String userID, byte[] image, String name) {
-        StorageReference uploadFile = storageReference.child("Customers/" + cusotmerID + "/" + name + ".jpg");
+    private void uploadImage(StorageReference storageReference, byte[] image, String name) {
+        customerID = parcelable.getUserID();
+        StorageReference uploadFile = storageReference.child("Customers/" + customerID + "/" + name + ".jpg");
         uploadFile.putBytes(image)
                 .addOnSuccessListener(taskSnapshot -> uploadFile.getDownloadUrl().addOnSuccessListener(uri -> {
                     downloadURL = uri.toString();
                     HashMap<String, Object> updateMap = new HashMap<>();
                     updateMap.put(name, downloadURL);
-                    Log.e(TAG, "uploadImage: custid"+cusotmerID );
-                    updateFirebase(userID, updateMap, name);
+                    Log.e(TAG, "uploadImage: CustomerID" + customerID);
+                    updateFirebase(updateMap);
                 }))
                 .addOnFailureListener(runnable -> Log.e(TAG, "uploadImage: exception " + runnable.getMessage()))
                 .addOnProgressListener(taskSnapshot -> view.showProgress((100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount()));
     }
 
-    private void updateFirebase(String userID, HashMap<String, Object> updateMap, String name) {
+    private void updateFirebase(HashMap<String, Object> updateMap) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("Customers").document(String.valueOf(cusotmerID))
+        firestore.collection("Customers").document(String.valueOf(customerID))
                 .update(updateMap)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.e(TAG, "updateFirebase: done " + updateMap);
-                        Toast.makeText(view.getContext(), "" + updateMap.get(name) + " uploaded", Toast.LENGTH_SHORT).show();
+                        incrementUserID(String.valueOf(customerID), firestore);
                     } else {
                         Log.e(TAG, "submitData: error uploading data " + Objects.requireNonNull(task.getException()).getMessage());
                         view.errorMsg("Some Error, Please try again!");
@@ -175,7 +164,16 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
 
     }
 
-    private void incrementUserID(String userID) {
+    private void incrementUserID(String userID, FirebaseFirestore firestore) {
         //increment userID here
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userID", userID);
+        firestore.collection("Admins").document("UserID")
+                .set(map).addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+                Log.e(TAG, "incrementUserID: userID updated ");
+            else
+                Log.e(TAG, "incrementUserID: exception " + Objects.requireNonNull(task.getException()).getMessage());
+        });
     }
 }

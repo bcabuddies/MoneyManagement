@@ -71,6 +71,8 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     ImageView addUserAddressImageView;
     @BindView(R.id.add_user_reference_imageView)
     ImageView addUserReferenceImageView;
+    @BindView(R.id.add_user_phone_textLayout)
+    TextInputLayout addUserPhoneTextLayout;
 
     private UsersParcelable usersParcelable;
     private AddUserPresenter presenter;
@@ -142,6 +144,7 @@ public class AddUser extends AppCompatActivity implements AddUserView {
         String amout = Objects.requireNonNull(addUserIntAmtTextLayout.getEditText()).getText().toString();
         String intRate = Objects.requireNonNull(addUserIntPerTextLayout.getEditText()).getText().toString();
         String date = dateShowTv.getText().toString();
+        String phone = Objects.requireNonNull(addUserPhoneTextLayout.getEditText()).getText().toString();
 
         usersParcelable.setName(name);
         usersParcelable.setAge(age);
@@ -149,6 +152,7 @@ public class AddUser extends AppCompatActivity implements AddUserView {
         usersParcelable.setIntRate(intRate);
         usersParcelable.setDate(date);
         usersParcelable.setUserID(user_id);
+        usersParcelable.setPhone(phone);
 
         aadharApprovedTv.setText(YES);
         addressApprovedTv.setText(YES);
@@ -169,6 +173,7 @@ public class AddUser extends AppCompatActivity implements AddUserView {
         addUserAgeTextLayout.setError(null);
         addUserIntAmtTextLayout.setError(null);
         addUserIntPerTextLayout.setError(null);
+        addUserPhoneTextLayout.setError(null);
     }
 
     @Override
@@ -178,6 +183,7 @@ public class AddUser extends AppCompatActivity implements AddUserView {
             code 1 = Age error
             code 2 = Amount error
             code 3 = Interest error
+            code 4 = Phone error
         */
         switch (code) {
             case 0:
@@ -194,6 +200,10 @@ public class AddUser extends AppCompatActivity implements AddUserView {
                 break;
             case 3:
                 addUserIntPerTextLayout.setError("Please Fill Interest %");
+                Utils.showMessage(this, error);
+                break;
+            case 4:
+                addUserPhoneTextLayout.setError("Please Add Phone Number");
                 Utils.showMessage(this, error);
                 break;
         }

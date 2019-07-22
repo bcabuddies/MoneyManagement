@@ -13,7 +13,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Objects;
 
 public class AddUserPresenterImpl implements AddUserPresenter {
 
@@ -47,7 +46,7 @@ public class AddUserPresenterImpl implements AddUserPresenter {
     }
 
     private void updateLabel() {
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         String date = sdf.format(myCalendar.getTime());
         view.showDate(date);
@@ -71,6 +70,8 @@ public class AddUserPresenterImpl implements AddUserPresenter {
             view.TextFieldsError("Please Fill Amount", 2);
         if (parcelable.getIntRate().isEmpty())
             view.TextFieldsError("Please Fill Interest", 3);
+        if (parcelable.getPhone().isEmpty())
+            view.TextFieldsError("Please Add Phone", 4);
 
         if (
                 !parcelable.getName().isEmpty() &&
@@ -81,7 +82,8 @@ public class AddUserPresenterImpl implements AddUserPresenter {
                         parcelable.getAadhar() != null &&
                         !parcelable.getDate().isEmpty() &&
                         parcelable.getReference() != null &&
-                        parcelable.getRelative() != null
+                        parcelable.getRelative() != null &&
+                        parcelable.getPhone() != null
         ) {
             //all fields and images is filled
             Log.e(TAG, "checkDetailsAndSubmit: fields are complete " + parcelable.toString());
@@ -96,21 +98,16 @@ public class AddUserPresenterImpl implements AddUserPresenter {
     public void setUserID() {
         //set a userID for the user
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("Admins")
-                .document("UserID").get().addOnCompleteListener(task -> {
-            if (Objects.requireNonNull(task.getResult()).exists()) {
-                String userID = task.getResult().getString("usedID");
-                Log.e(TAG, "setUserID: userID's from firebase " + userID);
-                int i = 0;
-                assert userID != null;
-                while (userID.contains(String.valueOf(i))) {
-                    i++;
-                }
-                if (!userID.contains(String.valueOf(i))) {
-                    String newUserID = String.valueOf(i);
-                    Log.e(TAG, "setUserID: new user ID = " + newUserID);
-                    view.userID(newUserID);
-                }
+        firestore.collection("Customers").addSnapshotListener((queryDocumentSnapshots, e) -> {
+            assert queryDocumentSnapshots != null;
+            if (!queryDocumentSnapshots.isEmpty()) {
+                String customerID = String.valueOf(queryDocumentSnapshots.size() + 1);
+                Log.e(TAG, "onEvent: customers count" + customerID);
+                view.userID(customerID);
+            } else {
+                String customerID = "1";
+                Log.e(TAG, "onEvent: zero customers so this is 1st " + customerID);
+                view.userID(customerID);
             }
         });
     }

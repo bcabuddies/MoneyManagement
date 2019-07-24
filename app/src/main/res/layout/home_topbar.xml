@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/trans">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/home_toolbar_userImg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/default_user"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/home_toolbar_user_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/name"
+        android:textColor="@color/white"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/home_toolbar_userImg"
+        app:layout_constraintEnd_toStartOf="@+id/home_toolbar_searchImage"
+        app:layout_constraintStart_toEndOf="@+id/home_toolbar_userImg"
+        app:layout_constraintTop_toTopOf="@+id/home_toolbar_userImg" />
+
+    <ImageView
+        android:id="@+id/home_toolbar_menuImage"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/desc"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/home_toolbar_user_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/home_toolbar_user_name"
+        app:srcCompat="@drawable/menu_icon" />
+
+    <ImageView
+        android:id="@+id/home_toolbar_searchImage"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/desc"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/home_toolbar_user_name"
+        app:layout_constraintEnd_toStartOf="@+id/home_toolbar_menuImage"
+        app:layout_constraintTop_toTopOf="@+id/home_toolbar_user_name"
+        app:srcCompat="@drawable/search_icon" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

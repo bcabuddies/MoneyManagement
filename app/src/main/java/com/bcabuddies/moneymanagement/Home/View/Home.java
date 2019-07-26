@@ -9,16 +9,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bcabuddies.moneymanagement.Accounts.Accounts;
 import com.bcabuddies.moneymanagement.AddUser.View.AddUser;
 import com.bcabuddies.moneymanagement.Home.Adapter.HomeAdapter;
 import com.bcabuddies.moneymanagement.Home.Presenter.HomePresenter;
 import com.bcabuddies.moneymanagement.Home.Presenter.HomePresenterImp;
 import com.bcabuddies.moneymanagement.Model.UserModel;
 import com.bcabuddies.moneymanagement.R;
+import com.bcabuddies.moneymanagement.Settings.Settings;
 import com.bcabuddies.moneymanagement.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,6 +59,7 @@ public class Home extends AppCompatActivity implements HomeView {
     private FirebaseFirestore firestore;
     private ArrayList<UserModel> userList;
     private HomeAdapter adapter;
+    private PopupMenu popup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +102,9 @@ public class Home extends AppCompatActivity implements HomeView {
         adapter = new HomeAdapter(userList);
         homeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         homeRecyclerView.setAdapter(adapter);
+
+        popup = new PopupMenu(Home.this, homeToolbarMenuImage);
+        popup.getMenuInflater().inflate(R.menu.home_option_menu, popup.getMenu());
     }
 
     @Override
@@ -124,11 +131,24 @@ public class Home extends AppCompatActivity implements HomeView {
     }
 
     private void createMenu() {
-
+        popup.show();
+        popup.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.home_menu_settings:
+                    Utils.setIntent(Home.this, Settings.class);
+                    break;
+                case R.id.home_menu_accounts:
+                    Utils.setIntent(Home.this, Accounts.class);
+                    return true;
+                default:
+                    return false;
+            }
+            return false;
+        });
     }
 
     private void openSearch() {
-
+        //search for users
     }
 
     @Override

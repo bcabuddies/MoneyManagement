@@ -13,7 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,InnerclassSeparator">
-        <activity android:name=".ViewUser.View.ViewUser"></activity>
+        <activity android:name=".Accounts.Accounts"></activity>
+        <activity android:name=".Settings.Settings" />
+        <activity android:name=".ViewUser.View.ViewUser" />
         <activity android:name=".PreviewUser.View.PreviewUser" />
         <activity android:name=".PostRegistration.View.PostRegistration" />
         <activity android:name=".Login.View.Login">

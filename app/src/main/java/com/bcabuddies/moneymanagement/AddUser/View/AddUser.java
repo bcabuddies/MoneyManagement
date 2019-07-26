@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -73,6 +74,12 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     ImageView addUserReferenceImageView;
     @BindView(R.id.add_user_phone_textLayout)
     TextInputLayout addUserPhoneTextLayout;
+    @BindView(R.id.add_user_takeRadio)
+    RadioButton addUserTakeRadio;
+    @BindView(R.id.add_user_giveRadio)
+    RadioButton addUserGiveRadio;
+    @BindView(R.id.add_user_docsTV)
+    TextView addUserDocsTV;
 
     private UsersParcelable usersParcelable;
     private AddUserPresenter presenter;
@@ -95,6 +102,8 @@ public class AddUser extends AppCompatActivity implements AddUserView {
         usersParcelable = new UsersParcelable();
 
         presenter.setUserID();
+
+        addUserGiveRadio.setChecked(true);
     }
 
     @Override
@@ -102,7 +111,16 @@ public class AddUser extends AppCompatActivity implements AddUserView {
         return this;
     }
 
-    @OnClick({R.id.add_user_date_card, R.id.add_user_aadharCard, R.id.add_user_addressCard, R.id.add_user_referenceCard, R.id.add_user_relativeCard, R.id.add_user_prevBtn})
+    @OnClick({
+            R.id.add_user_date_card,
+            R.id.add_user_aadharCard,
+            R.id.add_user_addressCard,
+            R.id.add_user_referenceCard,
+            R.id.add_user_relativeCard,
+            R.id.add_user_prevBtn,
+            R.id.add_user_takeRadio,
+            R.id.add_user_giveRadio
+    })
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.add_user_date_card:
@@ -132,7 +150,29 @@ public class AddUser extends AppCompatActivity implements AddUserView {
                 //send values to Presenter to calculate and all
                 getData();
                 break;
+            case R.id.add_user_takeRadio:
+                takeClicked();
+                break;
+            case R.id.add_user_giveRadio:
+                giveClicked();
+                break;
         }
+    }
+
+    private void giveClicked() {
+        addUserDocsTV.setVisibility(View.VISIBLE);
+        addUserAadharCard.setVisibility(View.VISIBLE);
+        addUserAddressCard.setVisibility(View.VISIBLE);
+        addUserReferenceCard.setVisibility(View.VISIBLE);
+        addUserRelativeCard.setVisibility(View.VISIBLE);
+    }
+
+    private void takeClicked() {
+        addUserDocsTV.setVisibility(View.GONE);
+        addUserAadharCard.setVisibility(View.GONE);
+        addUserAddressCard.setVisibility(View.GONE);
+        addUserReferenceCard.setVisibility(View.GONE);
+        addUserRelativeCard.setVisibility(View.GONE);
     }
 
     private void getData() {

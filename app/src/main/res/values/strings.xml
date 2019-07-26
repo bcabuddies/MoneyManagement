@@ -36,4 +36,6 @@
     <string name="complete">Complete</string>
     <string name="settings">Settings</string>
     <string name="accounts">Accounts</string>
+    <string name="give">Give</string>
+    <string name="take">Take</string>
 </resources>

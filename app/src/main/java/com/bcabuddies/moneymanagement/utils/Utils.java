@@ -17,6 +17,9 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Utils {
     //this class is for taking all the general use items into 1 place like Toast and Intents
     //you can add more as you like
+    public static final String DOWNLOAD_PATH = "update/money.apk";
+    public final static String VERSION = "0.1";
+    public final static String FILE_NAME = "money.apk";
 
     //simple Intent from a class to another
     public static void setIntent(Context context, Class destination) {

@@ -21,6 +21,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.Objects;
 
@@ -46,7 +48,6 @@ public class Login extends AppCompatActivity implements LoginView {
         loginPresenter = new LoginPresenterImp(auth);
         loginPresenter.attachView(this);
 
-        loginPresenter.checkLogin();
         checkLogin();
 
         // Configure Google Sign In
@@ -67,10 +68,15 @@ public class Login extends AppCompatActivity implements LoginView {
     }
 
     private void checkLogin() {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
         authStateListener = firebaseAuth -> {
             if (firebaseAuth.getCurrentUser() != null) {
                 Utils.setIntentNoBackLog(this, Home.class);
+                loginPresenter.update(firestore, firebaseStorage);
                 finish();
+            } else {
+                loginPresenter.update(firestore, firebaseStorage);
             }
         };
     }

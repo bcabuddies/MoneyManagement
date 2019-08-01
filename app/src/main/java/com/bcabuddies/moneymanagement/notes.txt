@@ -50,6 +50,14 @@ PS: single * = working, surrounding ** = complete;
 
 -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+1. Upload the new APK names as "money.apk" to Storage/update/money.apk
+2. change the "update" version to new which is greater than the "cur" or the current version
+    in the cloudFirestore location - Admins/update/
+3. change/update the versionCode and versionName in Gradle
+4. change/update public static final String VERSION in Utils.class
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 Extra Data :-
 
 parcel data fetch =

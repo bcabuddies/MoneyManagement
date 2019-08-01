@@ -31,6 +31,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
     private HashMap<String, Object> userMap = new HashMap<>();
     private String customerID;
 
+
     public PreviewUserPresenterImpl(UsersParcelable parcelable) {
         this.parcelable = parcelable;
     }

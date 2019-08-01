@@ -55,6 +55,7 @@ public class Home extends AppCompatActivity implements HomeView {
     ImageView homeToolbarSearchImage;
     @BindView(R.id.home_toolbar_userImg)
     CircleImageView homeToolbarUserImg;
+
     private FirebaseUser user;
     private FirebaseFirestore firestore;
     private ArrayList<UserModel> userList;

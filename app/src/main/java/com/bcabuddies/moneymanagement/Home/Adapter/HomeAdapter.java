@@ -83,7 +83,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         double p = Double.parseDouble(amount);
         double r = Double.parseDouble(intAmount);
         double t = 0.083; //for show taking 1/12 calculating only for 1 month
-        int result = (int) (p * r * t);
+        int result = (int) ((p * r * t) / 100);
         Log.e(TAG, "onBindViewHolder: p " + p + " r " + r + " t " + t + " res " + result);
 
         holder.nameTV.setText(name);

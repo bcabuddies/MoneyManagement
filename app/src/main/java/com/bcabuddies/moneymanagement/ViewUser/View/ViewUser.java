@@ -40,6 +40,7 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
 
         data = getIntent().getBundleExtra("data");
 
+        assert data != null;
         Log.e(TAG, "onCreate: bundle data " + data.getString("uid"));
     }
 

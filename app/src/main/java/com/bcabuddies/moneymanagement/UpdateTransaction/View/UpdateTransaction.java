@@ -9,12 +9,13 @@ import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bcabuddies.moneymanagement.Model.UsersParcelable;
 import com.bcabuddies.moneymanagement.R;
 import com.bcabuddies.moneymanagement.UpdateTransaction.Presenter.UpdateTranactionPresenter;
 import com.bcabuddies.moneymanagement.UpdateTransaction.Presenter.UpdateTransactionPresenterImpl;
 import com.bcabuddies.moneymanagement.utils.Utils;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +36,6 @@ public class UpdateTransaction extends AppCompatActivity implements UpdateTranac
     @BindView(R.id.updateTransaction_btnSubmit)
     Button btnSubmit;
     private UpdateTranactionPresenter updateTranactionPresenter;
-    private String interest,amount;
     private static final String TAG = "UpdateTransaction";
 
     @Override
@@ -46,11 +46,11 @@ public class UpdateTransaction extends AppCompatActivity implements UpdateTranac
 
         Bundle data = getIntent().getExtras();
         assert data != null;
-        UsersParcelable parcelable = data.getParcelable("data");
-        assert parcelable != null;
-        Log.e(TAG, "onCreate: parcelable in PreviewUser.class " + parcelable.toString());
+        Bundle bundle = data.getBundle("data");
+        assert bundle != null;
+        Log.e(TAG, "onCreate: customer id in bundle " + bundle.getString("uid"));
 
-        updateTranactionPresenter = new UpdateTransactionPresenterImpl(parcelable);
+        updateTranactionPresenter = new UpdateTransactionPresenterImpl(bundle);
         updateTranactionPresenter.attachView(this);
 
     }
@@ -75,9 +75,9 @@ public class UpdateTransaction extends AppCompatActivity implements UpdateTranac
             case R.id.updateTransaction_bothCheckBox:
                 break;
             case R.id.updateTransaction_btnSubmit:
-                interest=intlayout.getEditText().getText().toString();
-                amount=amtLayout.getEditText().getText().toString();
-                updateTranactionPresenter.executeUpdate(interest,amount);
+                String interest = Objects.requireNonNull(intlayout.getEditText()).getText().toString();
+                String amount = Objects.requireNonNull(amtLayout.getEditText()).getText().toString();
+                updateTranactionPresenter.executeUpdate(interest, amount);
                 break;
         }
     }

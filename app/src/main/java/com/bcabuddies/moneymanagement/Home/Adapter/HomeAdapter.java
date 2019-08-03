@@ -51,15 +51,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         String intAmount = userList.get(position).getRate();
         String uid = userList.get(position).UserModelID;
 
-        /*
-            String dt = "2008-01-01";  // Start date
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Calendar c = Calendar.getInstance();
-            c.setTime(sdf.parse(dt));
-            c.add(Calendar.DATE, 1);  // number of days to add
-            dt = sdf.format(c.getTime());  // dt is now the new date
-        */
-
         //to calculate next Date
         String TAG = "HomeAdapter";
         try {
@@ -76,7 +67,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         }
 
         //to calculate next amount
-        // P * R * T
+        // (P * R * T)/100
         // P = remaining amount
         // R = rate
         // T = time in months
@@ -96,6 +87,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         data.putString("uid", uid);
         data.putString("result", String.valueOf(result));
         data.putString("nextDate", date);
+        data.putString("name", name);
+        data.putString("rate", intAmount);
+        data.putString("total", amount);
 
         holder.userCard.setOnClickListener(view -> Utils.setIntentExtra(context, ViewUser.class, "data", data));
     }

@@ -24,7 +24,6 @@
     <string name="upload">upload</string>
     <string name="data">DATA</string>
     <string name="documents">Documents</string>
-    <string name="amount">Amount</string>
     <string name="rate">Rate</string>
     <string name="rupee_symbol">₹</string>
     <string name="enter_phone_number">Enter Phone Number</string>
@@ -38,4 +37,8 @@
     <string name="accounts">Accounts</string>
     <string name="give">Give</string>
     <string name="take">Take</string>
+    <string name="amount">Amount</string>
+    <string name="interest">Interest</string>
+    <string name="both">Both</string>
+    <string name="type">Type</string>
 </resources>

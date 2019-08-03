@@ -10,7 +10,7 @@ import com.google.firebase.firestore.Query;
 
 public class HomePresenterImp implements HomePresenter {
 
-    HomeView view;
+    private HomeView view;
 
     @Override
     public void attachView(HomeView view) {

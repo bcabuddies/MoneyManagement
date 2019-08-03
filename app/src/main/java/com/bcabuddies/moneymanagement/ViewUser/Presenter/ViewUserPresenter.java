@@ -4,4 +4,7 @@ import com.bcabuddies.moneymanagement.Base.BasePresenter;
 import com.bcabuddies.moneymanagement.ViewUser.View.ViewUserView;
 
 public interface ViewUserPresenter extends BasePresenter<ViewUserView> {
+
+    void getTransaction(String userID);
+
 }

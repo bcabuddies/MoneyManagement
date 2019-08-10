@@ -1,13 +1,17 @@
 package com.bcabuddies.moneymanagement.ViewUser.View;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,6 +55,8 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
     private Bundle data;
     private ArrayList<TransactionModel> transactionList;
     private TransactionAdapter adapter;
+    private ViewUserPresenter presenter;
+    private String name, amount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +68,7 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
         assert data != null;
         String userID = data.getString("uid");
 
-        ViewUserPresenter presenter = new ViewUserPresenterImpl();
+        presenter = new ViewUserPresenterImpl();
         presenter.attachView(this);
         presenter.getTransaction(userID);
 
@@ -77,6 +83,12 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
         setValues();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+    }
+
     @SuppressLint("SetTextI18n")
     private void setValues() {
         /*
@@ -87,9 +99,9 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
         data.putString("rate", intAmount);
         data.putString("total", amount);
         */
-        String name = data.getString("name");
+        name = data.getString("name");
         String date = data.getString("nextDate");
-        String amount = data.getString("total");
+        amount = data.getString("total");
         String intAmt = data.getString("result");
         String rate = data.getString("rate");
         String uid = data.getString("uid");
@@ -100,6 +112,8 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
         homeItemAmountTV.setText(intAmt + getString(R.string.rupee_symbol));
         homeItemUserTV.setText(uid);
         homeItemRateTV.setText(rate + "%");
+
+        presenter.updateIntAmount(intAmt, uid);
     }
 
     @Override
@@ -114,13 +128,33 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
                 Utils.setIntentExtra(this, UpdateTransaction.class, "data", data);
                 break;
             case R.id.view_user_completeBtn:
+                completeUser();
                 break;
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private void completeUser() {
+        String message = "This will complete and close <b>" + name + "</b> account and will add remaining <b>" + amount + getResources().getString(R.string.rupee_symbol) + "</b> to cash account";
+        final AlertDialog alertDialog;
+        alertDialog = new AlertDialog.Builder(this)
+                .setTitle("Caution!!")
+                .setMessage(Html.fromHtml(message, Html.FROM_HTML_MODE_COMPACT))
+                .setPositiveButton("Complete", (dialogInterface, i) -> presenter.completeFeature(amount))
+                .setNegativeButton("No", (dialogInterface, i) ->
+                        Log.e(TAG, "No clicked")).show();
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.green));
+        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.black));
     }
 
     @Override
     public void getTransactions(TransactionModel transactions) {
         transactionList.add(transactions);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void userCompleted() {
+        finish();
     }
 }

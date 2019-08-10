@@ -41,4 +41,5 @@
     <string name="interest">Interest</string>
     <string name="both">Both</string>
     <string name="type">Type</string>
+    <string name="cash">cash</string>
 </resources>

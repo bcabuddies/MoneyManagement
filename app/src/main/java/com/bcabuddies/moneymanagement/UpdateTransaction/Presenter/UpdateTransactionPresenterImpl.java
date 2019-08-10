@@ -19,6 +19,7 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
     private HashMap<String, Object> userMap = new HashMap<>();
     private String customerID;
     private Bundle bundle;
+    private String amount, interest;
 
 
     public UpdateTransactionPresenterImpl(Bundle bundle) {
@@ -35,9 +36,11 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
         view = null;
     }
 
-
     @Override
-    public void executeUpdate(String interest, String amount, String type) {
+    public void executeUpdate(String intr, String amt, String type) {
+
+        interest = intr;
+        amount = amt;
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -52,17 +55,21 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
         if (b) {
             userMap.put("isInt", false);
             userMap.put("interest", Utils.AESEncryptionString("0"));
+            interest = "0";
         } else {
             userMap.put("isInt", true);
             userMap.put("interest", Utils.AESEncryptionString(interest));
+            updateAmountOrInterest(interest, type, "intAmount");
         }
         boolean b1 = amount.equals("") || amount.isEmpty();
         if (b1) {
             userMap.put("isAmt", false);
             userMap.put("amount", Utils.AESEncryptionString("0"));
+            amount = "0";
         } else {
             userMap.put("isAmt", true);
             userMap.put("amount", Utils.AESEncryptionString(amount));
+            updateAmountOrInterest(amount, type, "amount");
         }
 
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -70,11 +77,38 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
             if (task.isSuccessful()) {
                 Log.e(TAG, ": customer user ID = " + customerID);
                 Log.e(TAG, "executeUpdate: updated " + userMap);
+                int total = Integer.parseInt(amount) + Integer.parseInt(interest);
+                Utils.adjustCash(total + "", type);
                 view.success();
             } else {
                 Log.e(TAG, "error uploading data set" + Objects.requireNonNull(task.getException()).getMessage());
                 view.errorMsg("Some Error, Please try again!");
             }
+        });
+    }
+
+    private void updateAmountOrInterest(String amount, String type, String account) {
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore.collection("Customers").document(customerID)
+                .get().addOnCompleteListener(task -> {
+            final String cash = Utils.AESDecryptionString(Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getString("amount")));
+
+            Log.e(TAG, "adjustCash: cash " + cash);
+
+            int result = 0;
+            if (type.contains("give"))
+                result = Integer.parseInt(cash) + Integer.parseInt(amount);
+            if (type.contains("take"))
+                result = Integer.parseInt(cash) - Integer.parseInt(amount);
+            Log.e(TAG, "adjustCash: result " + result);
+
+            HashMap<String, Object> updateMap = new HashMap<>();
+            updateMap.put("amount", Utils.AESEncryptionString(String.valueOf(result)));
+            firebaseFirestore.collection("Customers").document(customerID)
+                    .update(updateMap).addOnCompleteListener(task1 -> {
+                if (task1.isSuccessful())
+                    Log.e(TAG, "adjustCash: updated " + account + " " + updateMap.get(account));
+            });
         });
     }
 }

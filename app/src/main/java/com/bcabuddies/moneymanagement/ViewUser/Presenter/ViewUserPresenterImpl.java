@@ -4,15 +4,20 @@ import android.util.Log;
 
 import com.bcabuddies.moneymanagement.Model.TransactionModel;
 import com.bcabuddies.moneymanagement.ViewUser.View.ViewUserView;
+import com.bcabuddies.moneymanagement.utils.Utils;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.HashMap;
+import java.util.Objects;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class ViewUserPresenterImpl implements ViewUserPresenter {
 
     private ViewUserView view;
+    private String customerID = "";
 
     @Override
     public void attachView(ViewUserView view) {
@@ -45,12 +50,42 @@ public class ViewUserPresenterImpl implements ViewUserPresenter {
                             view.getTransactions(transactions);
                             Log.e(TAG, "getTransaction: transaction int amt " + transactions.getInterest());
                             Log.e(TAG, "getTransaction: transaction time " + transactions.getTime());
+                            customerID = transactions.getUserID();
                         }
                     }
                 }
             } catch (Exception e1) {
                 e1.printStackTrace();
                 Log.e(TAG, "getTransaction: exception in firebase query " + e1.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void completeFeature(String amount) {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        HashMap<String, Object> updateMap = new HashMap<>();
+        updateMap.put("completed", Utils.AESEncryptionString("yes"));
+        firestore.collection("Customers").document(customerID)
+                .update(updateMap).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Utils.adjustCash(amount, "take");
+                view.userCompleted();
+            }
+        });
+    }
+
+    @Override
+    public void updateIntAmount(String intAmt, String uid) {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        HashMap<String, Object> updateMap = new HashMap<>();
+        updateMap.put("intAmount", Utils.AESEncryptionString(intAmt));
+        firestore.collection("Customers").document(uid)
+                .update(updateMap).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.e(TAG, "updateIntAmount: intAmount updated " + intAmt);
+            } else {
+                Log.e(TAG, "updateIntAmount: exception in intAmount update " + Objects.requireNonNull(task.getException()).getMessage());
             }
         });
     }

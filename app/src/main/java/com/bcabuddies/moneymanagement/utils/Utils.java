@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.bcabuddies.moneymanagement.EncryptionKey.EncryptionKey;
@@ -15,10 +16,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -33,6 +36,7 @@ public class Utils {
     public final static String VERSION = "0.1";
     public final static String FILE_NAME = "money.apk";
     private static final String ENCRYPTION_TECH = "AES";
+    private static final String TAG = "Utils";
 
     //for encryption
     @SuppressLint("GetInstance")
@@ -143,6 +147,31 @@ public class Utils {
                     FirebaseAuth auth = FirebaseAuth.getInstance();
                     auth.signOut();
                     Utils.setIntentNoBackLog(context, Login.class);
+                });
+    }
+
+    public static void adjustCash(String amount, String type) {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("Admins").document("Accounts").get()
+                .addOnCompleteListener(task -> {
+                    final String cash = AESDecryptionString(task.getResult().getString("cash"));
+
+                    Log.e(TAG, "adjustCash: cash " + cash);
+
+                    int result = 0;
+                    if (type.contains("give"))
+                        result = Integer.parseInt(cash) - Integer.parseInt(amount);
+                    if (type.contains("take"))
+                        result = Integer.parseInt(cash) + Integer.parseInt(amount);
+                    Log.e(TAG, "adjustCash: result " + result);
+
+                    HashMap<String, Object> updateMap = new HashMap<>();
+                    updateMap.put("cash", AESEncryptionString(String.valueOf(result)));
+                    firestore.collection("Admins").document("Accounts")
+                            .update(updateMap).addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful())
+                            Log.e(TAG, "adjustCash: cash updated " + updateMap.get("cash"));
+                    });
                 });
     }
 }

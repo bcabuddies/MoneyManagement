@@ -7,4 +7,7 @@ public interface ViewUserPresenter extends BasePresenter<ViewUserView> {
 
     void getTransaction(String userID);
 
+    void completeFeature(String amount);
+
+    void updateIntAmount(String intAmt, String uid);
 }

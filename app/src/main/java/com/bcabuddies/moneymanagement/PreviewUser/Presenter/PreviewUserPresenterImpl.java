@@ -122,6 +122,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
         userMap.put("date", Utils.AESEncryptionString(parcelable.getDate()));
         userMap.put("phone", Utils.AESEncryptionString(parcelable.getPhone()));
         userMap.put("admin", Utils.AESEncryptionString(Objects.requireNonNull(auth.getCurrentUser()).getEmail()));
+        userMap.put("completed", Utils.AESEncryptionString("no"));
         userMap.put("userID", customerID);
 
         Log.e(TAG, "submitData: userMap " + userMap);
@@ -134,6 +135,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
                     if (task.isSuccessful()) {
                         Log.e(TAG, "submitData: customer user ID = " + customerID);
                         Log.e(TAG, "submitData: data uploaded on firestore ");
+                        Utils.adjustCash(parcelable.getAmount(), parcelable.getType());
                         view.everythingDone();
                     } else {
                         Log.e(TAG, "submitData: error uploading data set" + Objects.requireNonNull(task.getException()).getMessage());

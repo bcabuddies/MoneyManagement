@@ -50,9 +50,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         type = Utils.AESDecryptionString(transactionList.get(position).getType());
         time = transactionList.get(position).getTime();
         intAmount = Utils.AESDecryptionString(transactionList.get(position).getInterest());
-        totalAmount = Integer.parseInt(amount + intAmount);
-
-        Log.e(TAG, "onBindViewHolder: " + totalAmount);
+        totalAmount = Integer.parseInt(amount) + Integer.parseInt(intAmount);
 
         //setting amount and type
         holder.amountTV.setText(totalAmount + "" + context.getResources().getString(R.string.rupee_symbol));
@@ -64,7 +62,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat(pattern);
             Date d = new Date(time.getTime());
             holder.dateTV.setText(dateFormat.format(d));
-            Log.e(TAG, "onBindViewHolder: date " + dateFormat.format(d));
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "onBindViewHolder: exception " + e.getMessage());

@@ -7,4 +7,5 @@ public interface ViewUserView extends BaseView {
 
     void getTransactions(TransactionModel transactions);
 
+    void userCompleted();
 }

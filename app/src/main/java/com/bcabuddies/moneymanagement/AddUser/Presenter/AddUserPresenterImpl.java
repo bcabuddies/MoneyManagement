@@ -83,6 +83,7 @@ public class AddUserPresenterImpl implements AddUserPresenter {
                         !parcelable.getDate().isEmpty() &&
                         parcelable.getReference() != null &&
                         parcelable.getRelative() != null &&
+                        parcelable.getType() != null &&
                         parcelable.getPhone() != null
         ) {
             //all fields and images is filled

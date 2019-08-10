@@ -26,11 +26,12 @@ public class UsersParcelable implements Parcelable {
     private String relative;
     private String userID;
     private String phone;
+    private String type;
 
     public UsersParcelable() {
     }
 
-    public UsersParcelable(long id, String name, String age, String amount, String intRate, String date, String aadhar, String address, String reference, String relative, String userID, String phone) {
+    public UsersParcelable(long id, String name, String age, String amount, String intRate, String date, String aadhar, String address, String reference, String relative, String userID, String phone, String type) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -43,6 +44,7 @@ public class UsersParcelable implements Parcelable {
         this.relative = relative;
         this.userID = userID;
         this.phone = phone;
+        this.type = type;
     }
 
     public UsersParcelable(Parcel in) {
@@ -58,6 +60,15 @@ public class UsersParcelable implements Parcelable {
         this.relative = in.readString();
         this.userID = in.readString();
         this.phone = in.readString();
+        this.type = in.readString();
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public long getId() {
@@ -175,6 +186,7 @@ public class UsersParcelable implements Parcelable {
         parcel.writeString(this.relative);
         parcel.writeString(this.userID);
         parcel.writeString(this.phone);
+        parcel.writeString(this.type);
     }
 
     @Override
@@ -192,6 +204,7 @@ public class UsersParcelable implements Parcelable {
                 ", address= " + address +
                 ", reference= " + reference +
                 ", relative= " + relative +
+                ", type= " + type +
                 "}";
     }
 }

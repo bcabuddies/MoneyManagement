@@ -21,7 +21,7 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/desc"
         android:scaleType="centerCrop"
-        android:src="@drawable/home_back"
+        android:src="@drawable/transaction_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

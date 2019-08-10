@@ -84,9 +84,11 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     TextView addUserDocsTV;
     @BindView(R.id.add_user_relative_imageView)
     ImageView addUserRelativeImageView;
+
     private UsersParcelable usersParcelable;
     private AddUserPresenter presenter;
     private String user_id;
+    private String type = "give";
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -163,6 +165,7 @@ public class AddUser extends AppCompatActivity implements AddUserView {
         addUserAddressCard.setVisibility(View.VISIBLE);
         addUserReferenceCard.setVisibility(View.VISIBLE);
         addUserRelativeCard.setVisibility(View.VISIBLE);
+        type = "give";
     }
 
     private void takeClicked() {
@@ -171,6 +174,7 @@ public class AddUser extends AppCompatActivity implements AddUserView {
         addUserAddressCard.setVisibility(View.GONE);
         addUserReferenceCard.setVisibility(View.GONE);
         addUserRelativeCard.setVisibility(View.GONE);
+        type = "take";
     }
 
     private void getData() {
@@ -179,18 +183,19 @@ public class AddUser extends AppCompatActivity implements AddUserView {
         Log.e(TAG, "getData: clicked ");
         String name = Objects.requireNonNull(addUserNameTextLayout.getEditText()).getText().toString();
         String age = Objects.requireNonNull(addUserAgeTextLayout.getEditText()).getText().toString();
-        String amout = Objects.requireNonNull(addUserIntAmtTextLayout.getEditText()).getText().toString();
+        String amount = Objects.requireNonNull(addUserIntAmtTextLayout.getEditText()).getText().toString();
         String intRate = Objects.requireNonNull(addUserIntPerTextLayout.getEditText()).getText().toString();
         String date = dateShowTv.getText().toString();
         String phone = Objects.requireNonNull(addUserPhoneTextLayout.getEditText()).getText().toString();
 
         usersParcelable.setName(name);
         usersParcelable.setAge(age);
-        usersParcelable.setAmount(amout);
+        usersParcelable.setAmount(amount);
         usersParcelable.setIntRate(intRate);
         usersParcelable.setDate(date);
         usersParcelable.setUserID(user_id);
         usersParcelable.setPhone(phone);
+        usersParcelable.setType(type);
 
         aadharApprovedTv.setText(YES);
         addressApprovedTv.setText(YES);

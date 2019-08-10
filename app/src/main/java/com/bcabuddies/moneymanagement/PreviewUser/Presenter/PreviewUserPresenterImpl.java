@@ -53,6 +53,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
     public void addText(TextView previewTextTV, TextView previewDataTV) {
         previewTextTV.setText(
                 "" +
+                        "Type: " + "\n" +
                         "Name: " + "\n" +
                         "Age: " + "\n" +
                         "Amount: " + "\n" +
@@ -62,6 +63,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
         );
         previewDataTV.setText(
                 "" +
+                        parcelable.getType() + "\n" +
                         parcelable.getName() + "\n" +
                         parcelable.getAge() + "\n" +
                         parcelable.getAmount() + "\n" +
@@ -113,6 +115,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
         customerID = parcelable.getUserID();
 
         userMap.put("name", Utils.AESEncryptionString(parcelable.getName()));
+        userMap.put("type", Utils.AESEncryptionString(parcelable.getType()));
         userMap.put("age", Utils.AESEncryptionString(parcelable.getAge()));
         userMap.put("amount", Utils.AESEncryptionString(parcelable.getAmount()));
         userMap.put("rate", Utils.AESEncryptionString(parcelable.getIntRate()));

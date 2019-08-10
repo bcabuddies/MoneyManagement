@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.bcabuddies.moneymanagement.UpdateTransaction.View.UpdateTransactionView;
 import com.bcabuddies.moneymanagement.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -38,10 +39,13 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
     @Override
     public void executeUpdate(String interest, String amount, String type) {
 
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
         customerID = bundle.getString("uid");
         Log.e(TAG, "executeUpdate: customer id " + customerID);
         userMap.put("userID", customerID);
         userMap.put("type", Utils.AESEncryptionString(type));
+        userMap.put("admin", Utils.AESEncryptionString(Objects.requireNonNull(auth.getCurrentUser()).getEmail()));
         userMap.put("time", FieldValue.serverTimestamp());
 
         boolean b = interest.equals("") || interest.isEmpty();

@@ -15,9 +15,9 @@ import com.bcabuddies.moneymanagement.Model.TransactionModel;
 import com.bcabuddies.moneymanagement.R;
 import com.bcabuddies.moneymanagement.utils.Utils;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolder> {
@@ -55,17 +55,19 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         Log.e(TAG, "onBindViewHolder: " + totalAmount);
 
         //setting amount and type
-        holder.amountTV.setText(totalAmount + "");
+        holder.amountTV.setText(totalAmount + "" + context.getResources().getString(R.string.rupee_symbol));
         holder.typeTV.setText(type);
 
         //setting time in format dd/MM/yy
         try {
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(time);
-            holder.dateTV.setText(simpleDateFormat.format(calendar));
+            String pattern = "dd/MM/yy \nhh:mm:a";
+            @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat(pattern);
+            Date d = new Date(time.getTime());
+            holder.dateTV.setText(dateFormat.format(d));
+            Log.e(TAG, "onBindViewHolder: date " + dateFormat.format(d));
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e(TAG, "onBindViewHolder: exception " + e.getMessage());
         }
     }
 

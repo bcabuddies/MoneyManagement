@@ -1,45 +1,54 @@
 -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
 TODO 09.07.19
 1. Login -
-       *a)* Create Login and MVP
        *b)* Login with Google
        *c)* Get profileImg, name, email and send to PostReg
 2. PostRegistration -
-       *a)* Create PostRegistration and MVP
        *b)* User Data get from Login and show
        *c)* User Data upload to Firebase;
        *d)* Check for Admin email and only if Admin send to Home else logout and send to Welcome
        *e)* If user is not Admin it will log out and send to Login.java
 3. Home -
-       *a)* Create Home and MVP
        *b)* Only admins can login - admin emails in database at "Admins/AdminEmails/email"
        *c)* Add new user button
        *d)* Show users on Home Screen
        *e) LOG OUT button is for test need to change and put it to a : menu after testing
+        f) Transaction Button in place of LogOut Button
 4. AddUser -
-       *a)* Create AddUser and MVP
-       *b)* Layouts
        *c)* Admins can add users details
        *d)* Admins can upload photos like - AADHAR, PAN, etc.
        *e)* All "compulsory" details should be complete before adding user to database
        *f)* Fields showing errors if not filled
        *g)* DatePicker is working
        *h)* Data is passing with Parcel to Presenter
-        i) Add option to Add user's Phone
+       *i)* Add option to Add user's Phone
 5. PreviewUser -
        *a)* Data coming from Parcel
        *b)* Data showing on Fields and Views
        *c)* GridView for pictures
-       *d)* MVP of PreviewUser
        *e)* Data upload to Firebase
        *f)* Files upload to Storage
-       *g) Auto userID increment
+       *g)* Auto userID increment
 6. UserActivity -
-        a) create UserActivity and MVP
-        b) open UserActivity when clicking userCard
-        c) show user details
-        d) buttons - Complete User, Update Users;
-        e) Complete User, Update Users function
+       *b)* open UserActivity when clicking userCard
+       *c)* show user details
+       *d)* buttons - Complete User, Update Users;
+       *e)* Complete User, Update Users function
+       *f)* Show transactions in RecyclerView
+7. TransactionActivity -
+       *b)* update transactions
+       *c)* take or give amount
+       *d)* choose interest or amount or both
+8. SearchActivity -
+        a) Search User
+        b) Search as admin type
+        c) Open User from here
+9. AccountsActivity -
+        a) Cash Account
+        b) Show cash Transactions
+        c) show simple addition or subtraction calculations
+9. SettingsActivity -
+        a) Create and make it useful
 
 * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - *
 

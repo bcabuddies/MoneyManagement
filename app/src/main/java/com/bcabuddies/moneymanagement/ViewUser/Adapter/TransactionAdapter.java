@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bcabuddies.moneymanagement.Model.TransactionModel;
 import com.bcabuddies.moneymanagement.R;
+import com.bcabuddies.moneymanagement.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,10 +46,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         int totalAmount;
         Date time;
 
-        amount = transactionList.get(position).getAmount();
-        type = transactionList.get(position).getType();
+        amount = Utils.AESDecryptionString(transactionList.get(position).getAmount());
+        type = Utils.AESDecryptionString(transactionList.get(position).getType());
         time = transactionList.get(position).getTime();
-        intAmount = transactionList.get(position).getInterest();
+        intAmount = Utils.AESDecryptionString(transactionList.get(position).getInterest());
         totalAmount = Integer.parseInt(amount + intAmount);
 
         Log.e(TAG, "onBindViewHolder: " + totalAmount);

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.bcabuddies.moneymanagement.UpdateTransaction.View.UpdateTransactionView;
+import com.bcabuddies.moneymanagement.utils.Utils;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -40,24 +41,24 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
         customerID = bundle.getString("uid");
         Log.e(TAG, "executeUpdate: customer id " + customerID);
         userMap.put("userID", customerID);
-        userMap.put("type", type);
+        userMap.put("type", Utils.AESEncryptionString(type));
         userMap.put("time", FieldValue.serverTimestamp());
 
         boolean b = interest.equals("") || interest.isEmpty();
         if (b) {
             userMap.put("isInt", false);
-            userMap.put("interest", "0");
+            userMap.put("interest", Utils.AESEncryptionString("0"));
         } else {
             userMap.put("isInt", true);
-            userMap.put("interest", interest);
+            userMap.put("interest", Utils.AESEncryptionString(interest));
         }
         boolean b1 = amount.equals("") || amount.isEmpty();
         if (b1) {
             userMap.put("isAmt", false);
-            userMap.put("amount", "0");
+            userMap.put("amount", Utils.AESEncryptionString("0"));
         } else {
             userMap.put("isAmt", true);
-            userMap.put("amount", amount);
+            userMap.put("amount", Utils.AESEncryptionString(amount));
         }
 
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();

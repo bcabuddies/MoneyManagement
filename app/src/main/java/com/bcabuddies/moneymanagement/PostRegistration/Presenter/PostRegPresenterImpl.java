@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.bcabuddies.moneymanagement.PostRegistration.View.PostRegView;
+import com.bcabuddies.moneymanagement.utils.Utils;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -41,9 +42,9 @@ public class PostRegPresenterImpl implements PostRegPresenter {
 
         if (!name.isEmpty() || name.equals(null)) {
             HashMap<String, Object> maps = new HashMap<>();
-            maps.put("name", name);
-            maps.put("email", email);
-            maps.put("profile", profile);
+            maps.put("name", Utils.AESEncryptionString(name));
+            maps.put("email", Utils.AESEncryptionString(email));
+            maps.put("profile", Utils.AESEncryptionString(profile));
 
             assert user != null;
             Log.e(TAG, "uploadData: inside PostRegImpl uploadData current user = " + user.getUid());

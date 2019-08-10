@@ -45,10 +45,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String name = userList.get(position).getName();
-        String date = userList.get(position).getDate();
-        String amount = userList.get(position).getAmount();
-        String intAmount = userList.get(position).getRate();
+        String name = Utils.AESDecryptionString(userList.get(position).getName());
+        String date = Utils.AESDecryptionString(userList.get(position).getDate());
+        String amount = Utils.AESDecryptionString(userList.get(position).getAmount());
+        String intAmount = Utils.AESDecryptionString(userList.get(position).getRate());
         String uid = userList.get(position).UserModelID;
 
         //to calculate next Date

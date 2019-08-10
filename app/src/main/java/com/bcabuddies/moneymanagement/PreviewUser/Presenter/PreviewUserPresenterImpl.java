@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.bcabuddies.moneymanagement.Model.UsersParcelable;
 import com.bcabuddies.moneymanagement.PreviewUser.View.PreviewUserView;
+import com.bcabuddies.moneymanagement.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -106,14 +108,17 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
         uploadImage(storageReference, reference, "reference");
         uploadImage(storageReference, relative, "relative");
 
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
         customerID = parcelable.getUserID();
 
-        userMap.put("name", parcelable.getName());
-        userMap.put("age", parcelable.getAge());
-        userMap.put("amount", parcelable.getAmount());
-        userMap.put("rate", parcelable.getIntRate());
-        userMap.put("date", parcelable.getDate());
-        userMap.put("phone", parcelable.getPhone());
+        userMap.put("name", Utils.AESEncryptionString(parcelable.getName()));
+        userMap.put("age", Utils.AESEncryptionString(parcelable.getAge()));
+        userMap.put("amount", Utils.AESEncryptionString(parcelable.getAmount()));
+        userMap.put("rate", Utils.AESEncryptionString(parcelable.getIntRate()));
+        userMap.put("date", Utils.AESEncryptionString(parcelable.getDate()));
+        userMap.put("phone", Utils.AESEncryptionString(parcelable.getPhone()));
+        userMap.put("admin", Utils.AESEncryptionString(Objects.requireNonNull(auth.getCurrentUser()).getEmail()));
         userMap.put("userID", customerID);
 
         Log.e(TAG, "submitData: userMap " + userMap);
@@ -141,7 +146,7 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
                 .addOnSuccessListener(taskSnapshot -> uploadFile.getDownloadUrl().addOnSuccessListener(uri -> {
                     downloadURL = uri.toString();
                     HashMap<String, Object> updateMap = new HashMap<>();
-                    updateMap.put(name, downloadURL);
+                    updateMap.put(name, Utils.AESEncryptionString(downloadURL));
                     Log.e(TAG, "uploadImage: CustomerID" + customerID);
                     updateFirebase(updateMap);
                 }))

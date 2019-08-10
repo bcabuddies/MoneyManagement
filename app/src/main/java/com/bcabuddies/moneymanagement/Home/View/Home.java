@@ -79,9 +79,11 @@ public class Home extends AppCompatActivity implements HomeView {
                 String name = task.getResult().getString("name");
                 String profile = task.getResult().getString("profile");
 
-                homeToolbarUserName.setText(name);
+                assert name != null;
+                homeToolbarUserName.setText(Utils.AESDecryptionString(name));
                 try {
-                    Glide.with(this).load(profile).into(homeToolbarUserImg);
+                    assert profile != null;
+                    Glide.with(this).load(Utils.AESDecryptionString(profile)).into(homeToolbarUserImg);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG, "showNameAndProfile: error loading profile " + e.getMessage());

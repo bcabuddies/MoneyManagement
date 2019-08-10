@@ -1,5 +1,6 @@
 package com.bcabuddies.moneymanagement.ViewUser.Presenter;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import com.bcabuddies.moneymanagement.Model.TransactionModel;
@@ -18,6 +19,7 @@ public class ViewUserPresenterImpl implements ViewUserPresenter {
 
     private ViewUserView view;
     private String customerID = "";
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     @Override
     public void attachView(ViewUserView view) {
@@ -31,7 +33,6 @@ public class ViewUserPresenterImpl implements ViewUserPresenter {
 
     @Override
     public void getTransaction(String userID) {
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         Log.e("ViewUserPresenter", "getTransaction: userID " + userID);
         Query query = firestore.collection("Transactions")
                 .orderBy("time", Query.Direction.ASCENDING)
@@ -63,7 +64,6 @@ public class ViewUserPresenterImpl implements ViewUserPresenter {
 
     @Override
     public void completeFeature(String amount) {
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         HashMap<String, Object> updateMap = new HashMap<>();
         updateMap.put("completed", Utils.AESEncryptionString("yes"));
         firestore.collection("Customers").document(customerID)
@@ -77,7 +77,6 @@ public class ViewUserPresenterImpl implements ViewUserPresenter {
 
     @Override
     public void updateIntAmount(String intAmt, String uid) {
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         HashMap<String, Object> updateMap = new HashMap<>();
         updateMap.put("intAmount", Utils.AESEncryptionString(intAmt));
         firestore.collection("Customers").document(uid)
@@ -86,6 +85,20 @@ public class ViewUserPresenterImpl implements ViewUserPresenter {
                 Log.e(TAG, "updateIntAmount: intAmount updated " + intAmt);
             } else {
                 Log.e(TAG, "updateIntAmount: exception in intAmount update " + Objects.requireNonNull(task.getException()).getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getUser(String userID) {
+        firestore.collection("Customers").document(userID)
+                .get().addOnCompleteListener(task -> {
+            if (task.getResult().exists()) {
+                Bundle b = new Bundle();
+                b.putString("amount", Utils.AESDecryptionString(Objects.requireNonNull(task.getResult().getString("amount"))));
+                b.putString("rate", Utils.AESDecryptionString(Objects.requireNonNull(task.getResult().getString("rate"))));
+
+                view.showUserData(b);
             }
         });
     }

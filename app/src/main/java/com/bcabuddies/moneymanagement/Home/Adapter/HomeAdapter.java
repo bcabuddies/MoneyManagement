@@ -48,7 +48,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         String name = Utils.AESDecryptionString(userList.get(position).getName());
         String date = Utils.AESDecryptionString(userList.get(position).getDate());
         String amount = Utils.AESDecryptionString(userList.get(position).getAmount());
-        String intAmount = Utils.AESDecryptionString(userList.get(position).getRate());
+        String rate = Utils.AESDecryptionString(userList.get(position).getRate());
         String uid = userList.get(position).UserModelID;
 
         //to calculate next Date
@@ -66,29 +66,20 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             Log.e(TAG, "onBindViewHolder: exception in date " + e.getMessage());
         }
 
-        //to calculate next amount
-        // (P * R * T)/100
-        // P = remaining amount
-        // R = rate
-        // T = time in months
-        double p = Double.parseDouble(amount);
-        double r = Double.parseDouble(intAmount);
-        double t = 0.083; //for show taking 1/12 calculating only for 1 month
-        int result = (int) ((p * r * t) / 100);
-        Log.e(TAG, "onBindViewHolder: p " + p + " r " + r + " t " + t + " res " + result);
+        String result = Utils.calculateInt(amount, rate);
 
         holder.nameTV.setText(name);
         holder.amountLeftTV.setText(amount + context.getString(R.string.rupee_symbol));
         holder.amountTV.setText(result + context.getString(R.string.rupee_symbol));
-        holder.intAmountTV.setText(intAmount + "%");
+        holder.intAmountTV.setText(rate + "%");
         holder.userIdTV.setText(uid);
 
         Bundle data = new Bundle();
         data.putString("uid", uid);
-        data.putString("result", String.valueOf(result));
+        data.putString("result", result);
         data.putString("nextDate", date);
         data.putString("name", name);
-        data.putString("rate", intAmount);
+        data.putString("rate", rate);
         data.putString("total", amount);
 
         holder.userCard.setOnClickListener(view -> Utils.setIntentExtra(context, ViewUser.class, "data", data));

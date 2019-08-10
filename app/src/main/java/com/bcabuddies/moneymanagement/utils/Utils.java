@@ -174,4 +174,19 @@ public class Utils {
                     });
                 });
     }
+
+    public static String calculateInt(String amount, String rate) {
+        //to calculate next amount
+        // (P * R * T)/100
+        // P = remaining amount
+        // R = rate
+        // T = time in months(1/12) or days(1/365)
+
+        double p = Double.parseDouble(amount);
+        double r = Double.parseDouble(rate);
+        double t = 0.083; //for show taking 1/12 calculating only for 1 month
+        int result = (int) ((p * r * t) / 100);
+        Log.e(TAG, "onBindViewHolder: p " + p + " r " + r + " t " + t + " res " + result);
+        return String.valueOf(result);
+    }
 }

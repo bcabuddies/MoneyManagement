@@ -62,7 +62,8 @@ public class UpdateTransaction extends AppCompatActivity implements UpdateTransa
         amtLayout.setEnabled(true);
         Log.e(TAG, "init: total " + data.getString("result"));
         Objects.requireNonNull(intLayout.getEditText()).setText(data.getString("result"));
-        Objects.requireNonNull(amtLayout.getEditText()).setText(data.getString("total"));
+        intLayout.setHelperText("Interest Amount = " + data.getString("result"));
+        amtLayout.setHelperText("Remaining Amount = " + data.getString("total"));
     }
 
     @Override

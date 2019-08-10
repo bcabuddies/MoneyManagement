@@ -10,4 +10,6 @@ public interface ViewUserPresenter extends BasePresenter<ViewUserView> {
     void completeFeature(String amount);
 
     void updateIntAmount(String intAmt, String uid);
+
+    void getUser(String userID);
 }

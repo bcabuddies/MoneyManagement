@@ -56,7 +56,7 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
     private ArrayList<TransactionModel> transactionList;
     private TransactionAdapter adapter;
     private ViewUserPresenter presenter;
-    private String name, amount;
+    private String name, amount, userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +66,11 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
 
         data = getIntent().getBundleExtra("data");
         assert data != null;
-        String userID = data.getString("uid");
+        userID = data.getString("uid");
 
         presenter = new ViewUserPresenterImpl();
         presenter.attachView(this);
+        presenter.getUser(userID);
         presenter.getTransaction(userID);
 
         transactionList = new ArrayList<>();
@@ -79,41 +80,13 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
 
         assert data != null;
         Log.e(TAG, "onCreate: bundle data " + data.getString("uid"));
-
-        setValues();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         adapter.notifyDataSetChanged();
-    }
-
-    @SuppressLint("SetTextI18n")
-    private void setValues() {
-        /*
-        data.putString("uid", uid);
-        data.putString("result", String.valueOf(result));
-        data.putString("nextDate", date);
-        data.putString("name", name);
-        data.putString("rate", intAmount);
-        data.putString("total", amount);
-        */
-        name = data.getString("name");
-        String date = data.getString("nextDate");
-        amount = data.getString("total");
-        String intAmt = data.getString("result");
-        String rate = data.getString("rate");
-        String uid = data.getString("uid");
-
-        homeItemNameTV.setText(name);
-        homeItemDateTV.setText(date);
-        homeItemAmountLeftTV.setText(amount + getString(R.string.rupee_symbol));
-        homeItemAmountTV.setText(intAmt + getString(R.string.rupee_symbol));
-        homeItemUserTV.setText(uid);
-        homeItemRateTV.setText(rate + "%");
-
-        presenter.updateIntAmount(intAmt, uid);
+        presenter.getUser(userID);
     }
 
     @Override
@@ -156,5 +129,25 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
     @Override
     public void userCompleted() {
         finish();
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void showUserData(Bundle b) {
+        name = data.getString("name");
+        String date = data.getString("nextDate");
+        amount = b.getString("amount");
+        String rate = b.getString("rate");
+        String uid = data.getString("uid");
+        String intAmt = Utils.calculateInt(amount, rate);
+
+        homeItemNameTV.setText(name);
+        homeItemDateTV.setText(date);
+        homeItemAmountLeftTV.setText(amount + getString(R.string.rupee_symbol));
+        homeItemAmountTV.setText(intAmt + getString(R.string.rupee_symbol));
+        homeItemUserTV.setText(uid);
+        homeItemRateTV.setText(rate + "%");
+
+        presenter.updateIntAmount(intAmt, uid);
     }
 }

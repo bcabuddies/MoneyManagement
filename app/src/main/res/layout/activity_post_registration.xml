@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostRegistration.View.PostRegistration">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/postreg_back" />
+
+    <ImageView
+        android:id="@+id/postreg_detback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/postreg_user_back"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/post_profileView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/default_user"
+        app:layout_constraintBottom_toTopOf="@id/postreg_detback"
+        app:layout_constraintLeft_toRightOf="@id/postreg_detback"
+        app:layout_constraintRight_toLeftOf="@id/postreg_detback"
+        app:layout_constraintTop_toTopOf="@id/postreg_detback" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/post_nameLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edittext_back"
+        android:padding="10dp"
+        android:textColorHint="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@id/postreg_detback"
+        app:layout_constraintStart_toStartOf="@id/postreg_detback"
+        app:layout_constraintTop_toBottomOf="@id/post_profileView">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="@string/name"
+            android:inputType="textPersonName"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/post_emailLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edittext_back"
+        android:clickable="false"
+        android:padding="10dp"
+        android:textColorHint="#ffffff"
+        app:layout_constraintEnd_toEndOf="@id/postreg_detback"
+        app:layout_constraintStart_toStartOf="@id/postreg_detback"
+        app:layout_constraintTop_toBottomOf="@+id/post_nameLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:clickable="false"
+            android:enabled="false"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textColor="#ffffff" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/post_nextBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/edittext_back"
+        android:backgroundTint="#1A9AA5"
+        android:text="@string/submit"
+        android:textColor="#ffffff"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/postreg_detback"
+        app:layout_constraintEnd_toEndOf="@id/post_emailLayout"
+        app:layout_constraintLeft_toRightOf="@id/postreg_detback"
+        app:layout_constraintRight_toLeftOf="@id/postreg_detback"
+        app:layout_constraintStart_toStartOf="@id/post_emailLayout"
+
+        app:layout_constraintTop_toBottomOf="@id/post_emailLayout" />
+</androidx.constraintlayout.widget.ConstraintLayout>

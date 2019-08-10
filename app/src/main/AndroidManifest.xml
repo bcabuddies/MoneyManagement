@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,InnerclassSeparator">
-        <activity android:name=".UpdateTransaction.View.UpdateTransaction"></activity>
+        <activity android:name=".UpdateTransaction.View.UpdateTransaction" />
         <activity android:name=".Accounts.Accounts" />
         <activity android:name=".Settings.Settings" />
         <activity android:name=".ViewUser.View.ViewUser" />

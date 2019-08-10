@@ -39,18 +39,18 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
     Button viewUserCompleteBtn;
     @BindView(R.id.user_transaction_recyclerView)
     RecyclerView userTransactionRecyclerView;
-    @BindView(R.id.home_item_nameTV)
-    TextView homeItemNameTV;
-    @BindView(R.id.home_item_dateTV)
-    TextView homeItemDateTV;
-    @BindView(R.id.home_item_amountLeftTV)
-    TextView homeItemAmountLeftTV;
-    @BindView(R.id.home_item_amountTV)
-    TextView homeItemAmountTV;
-    @BindView(R.id.home_item_rateTV)
-    TextView homeItemRateTV;
-    @BindView(R.id.home_item_userTV)
-    TextView homeItemUserTV;
+    @BindView(R.id.view_user_nameTV)
+    TextView viewUserNameTV;
+    @BindView(R.id.view_user_dateTV)
+    TextView viewUserDateTV;
+    @BindView(R.id.view_user_amountLeftTV)
+    TextView viewUserAmountLeftTV;
+    @BindView(R.id.view_user_amountTV)
+    TextView viewUserAmountTV;
+    @BindView(R.id.view_user_rateTV)
+    TextView viewUserRateTV;
+    @BindView(R.id.view_user_userTV)
+    TextView viewUserUserTV;
 
     private Bundle data;
     private ArrayList<TransactionModel> transactionList;
@@ -141,12 +141,12 @@ public class ViewUser extends AppCompatActivity implements ViewUserView {
         String uid = data.getString("uid");
         String intAmt = Utils.calculateInt(amount, rate);
 
-        homeItemNameTV.setText(name);
-        homeItemDateTV.setText(date);
-        homeItemAmountLeftTV.setText(amount + getString(R.string.rupee_symbol));
-        homeItemAmountTV.setText(intAmt + getString(R.string.rupee_symbol));
-        homeItemUserTV.setText(uid);
-        homeItemRateTV.setText(rate + "%");
+        viewUserNameTV.setText(name);
+        viewUserDateTV.setText(date);
+        viewUserAmountLeftTV.setText(amount + getString(R.string.rupee_symbol));
+        viewUserAmountTV.setText(intAmt + getString(R.string.rupee_symbol));
+        viewUserUserTV.setText(uid);
+        viewUserRateTV.setText(rate + "%");
 
         presenter.updateIntAmount(intAmt, uid);
     }

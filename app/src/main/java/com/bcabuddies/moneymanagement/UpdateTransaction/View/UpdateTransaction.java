@@ -55,7 +55,7 @@ public class UpdateTransaction extends AppCompatActivity implements UpdateTransa
         ButterKnife.bind(this);
 
         try {
-            Bundle data = getIntent().getExtras().getBundle("data");
+            Bundle data = Objects.requireNonNull(getIntent().getExtras()).getBundle("data");
 
             if (data != null) {
                 Log.e(TAG, "onCreate: customer id in data " + data.getString("uid"));
@@ -176,18 +176,10 @@ public class UpdateTransaction extends AppCompatActivity implements UpdateTransa
         if (type.contains("give")) {
             String interest = Objects.requireNonNull(intLayout.getEditText()).getText().toString();
             String amount = Objects.requireNonNull(amtLayout.getEditText()).getText().toString();
-            if (amount == null)
-                amount = "0";
-            if (interest == null)
-                interest = "0";
             updateTransactionPresenter.executeUpdate(interest, amount, "give");
         } else if (type.contains("take")) {
-            String interest = intLayout.getEditText().getText().toString();
-            String amount = amtLayout.getEditText().getText().toString();
-            if (amount == null)
-                amount = "0";
-            if (interest == null)
-                interest = "0";
+            String interest = Objects.requireNonNull(intLayout.getEditText()).getText().toString();
+            String amount = Objects.requireNonNull(amtLayout.getEditText()).getText().toString();
             updateTransactionPresenter.executeUpdate(interest, amount, "take");
         }
     }

@@ -22,7 +22,7 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
     private HashMap<String, Object> userMap = new HashMap<>();
     private String customerID;
     private Bundle bundle;
-    private String amount, interest;
+    private String amount;
     private ArrayList<String> userNameList = new ArrayList<>();
 
     public UpdateTransactionPresenterImpl() {
@@ -45,7 +45,6 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
     @Override
     public void executeUpdate(String intr, String amt, String type) {
 
-        interest = intr;
         amount = amt;
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -62,15 +61,14 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
         userMap.put("admin", Utils.AESEncryptionString(Objects.requireNonNull(auth.getCurrentUser()).getEmail()));
         userMap.put("time", FieldValue.serverTimestamp());
 
-        boolean b = interest.equals("") || interest.isEmpty();
+        boolean b = intr.equals("") || intr.isEmpty();
         if (b) {
             userMap.put("isInt", false);
             userMap.put("interest", Utils.AESEncryptionString("0"));
-            interest = "0";
         } else {
             userMap.put("isInt", true);
-            userMap.put("interest", Utils.AESEncryptionString(interest));
-            updateAmountOrInterest(interest, type, "intAmount");
+            userMap.put("interest", Utils.AESEncryptionString(intr));
+            updateAmountOrInterest(intr, type, "intAmount");
         }
         boolean b1 = amount.equals("") || amount.isEmpty();
         if (b1) {
@@ -88,9 +86,8 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
             if (task.isSuccessful()) {
                 Log.e(TAG, ": customer user ID = " + customerID);
                 Log.e(TAG, "executeUpdate: updated " + userMap);
-                if (amount == null || amount.equals("")) {
+                if (amount == null || amount.equals(""))
                     amount = "0";
-                }
                 Utils.adjustCash(Integer.parseInt(amount) + "", type);
                 view.success();
             } else {
@@ -123,6 +120,7 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
         firebaseFirestore.collection("Customers")
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
                     try {
+                        assert queryDocumentSnapshots != null;
                         if (!queryDocumentSnapshots.isEmpty()) {
                             for (final DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
                                 if (doc.getType() == DocumentChange.Type.ADDED) {

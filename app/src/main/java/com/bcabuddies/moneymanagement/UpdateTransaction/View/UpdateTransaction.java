@@ -16,11 +16,13 @@ import com.bcabuddies.moneymanagement.UpdateTransaction.Presenter.UpdateTransact
 import com.bcabuddies.moneymanagement.utils.Utils;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import in.galaxyofandroid.spinerdialog.SpinnerDialog;
 
 public class UpdateTransaction extends AppCompatActivity implements UpdateTransactionView {
 
@@ -39,8 +41,12 @@ public class UpdateTransaction extends AppCompatActivity implements UpdateTransa
     Button btnGive;
     @BindView(R.id.updateTransaction_btnTake)
     Button btnTake;
+    @BindView(R.id.updateTransaction_userIDLayout)
+    TextInputLayout updateTransactionUserIDLayout;
+
     private UpdateTransactionPresenter updateTransactionPresenter;
-    private Bundle data;
+    private SpinnerDialog spinnerDialog;
+    private ArrayList<String> userNameList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +54,56 @@ public class UpdateTransaction extends AppCompatActivity implements UpdateTransa
         setContentView(R.layout.activity_update_transaction);
         ButterKnife.bind(this);
 
-        data = Objects.requireNonNull(getIntent().getExtras()).getBundle("data");
-        assert data != null;
-        Log.e(TAG, "onCreate: customer id in data " + data.getString("uid"));
+        try {
+            Bundle data = getIntent().getExtras().getBundle("data");
 
-        init();
+            if (data != null) {
+                Log.e(TAG, "onCreate: customer id in data " + data.getString("uid"));
+                Objects.requireNonNull(updateTransactionUserIDLayout.getEditText())
+                        .setText(data.getString("name"));
+                updateTransactionUserIDLayout.setEnabled(false);
+                initWithBundle(data);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "onCreate: exception bundle is null " + e.getMessage());
+        }
+
+        initWithoutBundle();
     }
 
-    private void init() {
+    private void initWithoutBundle() {
+        updateTransactionPresenter = new UpdateTransactionPresenterImpl();
+        updateTransactionPresenter.attachView(this);
+        updateTransactionPresenter.addUserName();
+        intCheckBox.setChecked(true);
+        amtLayout.setEnabled(true);
+
+        Log.e(TAG, "initWithoutBundle: inside initWithout bundle ");
+
+        spinnerDialog = new SpinnerDialog(UpdateTransaction.this,
+                userNameList,
+                "Select or Search User",
+                "Close");
+
+        spinnerDialog.bindOnSpinerListener((item, position) -> {
+            String[] parts = item.split(" id:");
+            String name = parts[0].trim(); // name
+            String id = parts[1].trim(); // id
+            Objects.requireNonNull(updateTransactionUserIDLayout.getEditText()).setText(name);
+            Log.e(TAG, "initWithoutBundle: uid from Utils " + id);
+            updateTransactionPresenter.getUserDetails(id);
+        });
+    }
+
+    private void initWithBundle(Bundle data) {
         updateTransactionPresenter = new UpdateTransactionPresenterImpl(data);
         updateTransactionPresenter.attachView(this);
         intCheckBox.setChecked(true);
         amtLayout.setEnabled(true);
         Log.e(TAG, "init: total " + data.getString("result"));
         Objects.requireNonNull(intLayout.getEditText()).setText(data.getString("result"));
+        Objects.requireNonNull(amtLayout.getEditText()).setText("0");
         intLayout.setHelperText("Interest Amount = " + data.getString("result"));
         amtLayout.setHelperText("Remaining Amount = " + data.getString("total"));
     }
@@ -78,15 +120,43 @@ public class UpdateTransaction extends AppCompatActivity implements UpdateTransa
     }
 
     @Override
-    public Context getContext() {
-        return null;
+    public void showData(String amount, String intAmt) {
+        Objects.requireNonNull(intLayout.getEditText()).setText(intAmt);
+        Objects.requireNonNull(amtLayout.getEditText()).setText("0");
+        intLayout.setHelperText("Interest Amount = " + intAmt);
+        amtLayout.setHelperText("Remaining Amount = " + amount);
     }
 
-    @OnClick({R.id.updateTransaction_amtCheckBox, R.id.updateTransaction_intCheckBox, R.id.updateTransaction_bothCheckBox, R.id.updateTransaction_btnGive, R.id.updateTransaction_btnTake})
+    @Override
+    public void showUserName(ArrayList<String> userNameList) {
+        this.userNameList = userNameList;
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @OnClick({
+            R.id.updateTransaction_amtCheckBox,
+            R.id.updateTransaction_userIDLayout,
+            R.id.updateTransaction_intCheckBox,
+            R.id.updateTransaction_bothCheckBox,
+            R.id.updateTransaction_userIDTV,
+            R.id.updateTransaction_btnGive,
+            R.id.updateTransaction_btnTake})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.updateTransaction_amtCheckBox:
                 enableAmount();
+                break;
+            case R.id.updateTransaction_userIDLayout:
+                spinnerDialog.showSpinerDialog();
+                Log.e(TAG, "onViewClicked: editText clicked ");
+                break;
+            case R.id.updateTransaction_userIDTV:
+                spinnerDialog.showSpinerDialog();
+                Log.e(TAG, "onViewClicked: editText clicked ");
                 break;
             case R.id.updateTransaction_intCheckBox:
                 break;
@@ -94,15 +164,31 @@ public class UpdateTransaction extends AppCompatActivity implements UpdateTransa
                 bothChecked();
                 break;
             case R.id.updateTransaction_btnGive:
-                String interest = Objects.requireNonNull(intLayout.getEditText()).getText().toString();
-                String amount = Objects.requireNonNull(amtLayout.getEditText()).getText().toString();
-                updateTransactionPresenter.executeUpdate(interest, amount, "give");
+                update("give");
                 break;
             case R.id.updateTransaction_btnTake:
-                interest = Objects.requireNonNull(intLayout.getEditText()).getText().toString();
-                amount = Objects.requireNonNull(amtLayout.getEditText()).getText().toString();
-                updateTransactionPresenter.executeUpdate(interest, amount, "take");
+                update("take");
                 break;
+        }
+    }
+
+    private void update(String type) {
+        if (type.contains("give")) {
+            String interest = Objects.requireNonNull(intLayout.getEditText()).getText().toString();
+            String amount = Objects.requireNonNull(amtLayout.getEditText()).getText().toString();
+            if (amount == null)
+                amount = "0";
+            if (interest == null)
+                interest = "0";
+            updateTransactionPresenter.executeUpdate(interest, amount, "give");
+        } else if (type.contains("take")) {
+            String interest = intLayout.getEditText().getText().toString();
+            String amount = amtLayout.getEditText().getText().toString();
+            if (amount == null)
+                amount = "0";
+            if (interest == null)
+                interest = "0";
+            updateTransactionPresenter.executeUpdate(interest, amount, "take");
         }
     }
 

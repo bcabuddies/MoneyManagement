@@ -27,6 +27,63 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <CheckBox
+        android:id="@+id/updateTransaction_amtCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/amount"
+        android:textColor="#ffffff"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="@+id/updateTransaction_intLayout"
+        app:layout_constraintTop_toBottomOf="@+id/updateTransaction_intCheckBox" />
+
+    <CheckBox
+        android:id="@+id/updateTransaction_intCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="16dp"
+        android:text="@string/interest"
+        android:textColor="#ffffff"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="@+id/updateTransaction_intLayout"
+        app:layout_constraintTop_toBottomOf="@+id/updateTransaction_userIDLayout" />
+
+    <CheckBox
+        android:id="@+id/updateTransaction_bothCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/both"
+        android:textColor="#ffffff"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="@+id/updateTransaction_intLayout"
+        app:layout_constraintTop_toBottomOf="@+id/updateTransaction_amtCheckBox" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/updateTransaction_userIDLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/round_btn_bg_light"
+        android:padding="4dp"
+        app:helperTextTextAppearance="@color/warm_yellow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/updateTransaction_userIDTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:hint="@string/userID" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/updateTransaction_intLayout"
         android:layout_width="match_parent"
@@ -35,7 +92,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="64dp"
         android:background="@drawable/round_btn_bg_light"
-        android:padding="5dp"
+        android:padding="4dp"
         app:helperTextTextAppearance="@color/warm_yellow"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +116,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/round_btn_bg_light"
-        android:padding="5dp"
+        android:padding="4dp"
         app:helperTextTextAppearance="@color/warm_yellow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,46 +126,10 @@
             android:id="@+id/updateTransaction_amtEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:enabled="false"
             android:hint="@string/amount"
             android:inputType="numberDecimal" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-
-    <CheckBox
-        android:id="@+id/updateTransaction_amtCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/amount"
-        android:textColor="#ffffff"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/updateTransaction_bothCheckBox"
-        app:layout_constraintStart_toStartOf="@+id/updateTransaction_intLayout" />
-
-    <CheckBox
-        android:id="@+id/updateTransaction_intCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_marginBottom="8dp"
-        android:text="@string/interest"
-        android:textColor="#ffffff"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/updateTransaction_amtCheckBox"
-        app:layout_constraintStart_toStartOf="@+id/updateTransaction_intLayout" />
-
-    <CheckBox
-        android:id="@+id/updateTransaction_bothCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        android:text="@string/both"
-        android:textColor="#ffffff"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@id/updateTransaction_intLayout"
-        app:layout_constraintStart_toStartOf="@+id/updateTransaction_intLayout" />
 
     <Button
         android:id="@+id/updateTransaction_btnGive"

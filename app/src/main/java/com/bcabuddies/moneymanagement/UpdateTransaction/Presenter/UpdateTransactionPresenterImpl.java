@@ -3,12 +3,15 @@ package com.bcabuddies.moneymanagement.UpdateTransaction.Presenter;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.bcabuddies.moneymanagement.Model.UserModel;
 import com.bcabuddies.moneymanagement.UpdateTransaction.View.UpdateTransactionView;
 import com.bcabuddies.moneymanagement.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -20,7 +23,10 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
     private String customerID;
     private Bundle bundle;
     private String amount, interest;
+    private ArrayList<String> userNameList = new ArrayList<>();
 
+    public UpdateTransactionPresenterImpl() {
+    }
 
     public UpdateTransactionPresenterImpl(Bundle bundle) {
         this.bundle = bundle;
@@ -44,7 +50,12 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
-        customerID = bundle.getString("uid");
+        try {
+            customerID = bundle.getString("uid");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "executeUpdate: exception in bundle ");
+        }
         Log.e(TAG, "executeUpdate: customer id " + customerID);
         userMap.put("userID", customerID);
         userMap.put("type", Utils.AESEncryptionString(type));
@@ -77,14 +88,59 @@ public class UpdateTransactionPresenterImpl implements UpdateTransactionPresente
             if (task.isSuccessful()) {
                 Log.e(TAG, ": customer user ID = " + customerID);
                 Log.e(TAG, "executeUpdate: updated " + userMap);
-                int total = Integer.parseInt(amount) + Integer.parseInt(interest);
-                Utils.adjustCash(total + "", type);
+                if (amount == null || amount.equals("")) {
+                    amount = "0";
+                }
+                Utils.adjustCash(Integer.parseInt(amount) + "", type);
                 view.success();
             } else {
                 Log.e(TAG, "error uploading data set" + Objects.requireNonNull(task.getException()).getMessage());
                 view.errorMsg("Some Error, Please try again!");
             }
         });
+    }
+
+    @Override
+    public void getUserDetails(String userID) {
+        customerID = userID;
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore.collection("Customers").document(userID)
+                .get().addOnCompleteListener(task -> {
+            if (Objects.requireNonNull(task.getResult()).exists()) {
+                String rate = Utils.AESDecryptionString(Objects.requireNonNull(task.getResult().getString("rate")));
+                String amount = Utils.AESDecryptionString(Objects.requireNonNull(task.getResult().getString("amount")));
+                String intAmt = Utils.calculateInt(amount, rate);
+
+                view.showData(amount, intAmt);
+            }
+        });
+    }
+
+    @Override
+    public void addUserName() {
+        //add user name to searchable list
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore.collection("Customers")
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    try {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (final DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
+                                if (doc.getType() == DocumentChange.Type.ADDED) {
+                                    String customerId = doc.getDocument().getId();
+                                    final UserModel user =
+                                            doc.getDocument().toObject(UserModel.class)
+                                                    .withID(customerId);
+                                    String userName = Utils.AESDecryptionString(user.getName());
+                                    userNameList.add(userName + " id:" + customerId);
+                                }
+                            }
+                        }
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                        Log.e(TAG, "addUserName: exception adding user name and id to list ");
+                    }
+                });
+        view.showUserName(userNameList);
     }
 
     private void updateAmountOrInterest(String amount, String type, String account) {

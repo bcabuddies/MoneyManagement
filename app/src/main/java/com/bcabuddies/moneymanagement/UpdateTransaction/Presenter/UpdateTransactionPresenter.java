@@ -5,4 +5,8 @@ import com.bcabuddies.moneymanagement.UpdateTransaction.View.UpdateTransactionVi
 
 public interface UpdateTransactionPresenter extends BasePresenter<UpdateTransactionView> {
     void executeUpdate(String interest, String amount, String type);
+
+    void getUserDetails(String userID);
+
+    void addUserName();
 }

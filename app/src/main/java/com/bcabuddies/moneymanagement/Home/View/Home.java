@@ -22,6 +22,7 @@ import com.bcabuddies.moneymanagement.Home.Presenter.HomePresenterImp;
 import com.bcabuddies.moneymanagement.Model.UserModel;
 import com.bcabuddies.moneymanagement.R;
 import com.bcabuddies.moneymanagement.Settings.Settings;
+import com.bcabuddies.moneymanagement.UpdateTransaction.View.UpdateTransaction;
 import com.bcabuddies.moneymanagement.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,7 +46,7 @@ public class Home extends AppCompatActivity implements HomeView {
     RecyclerView homeRecyclerView;
     @BindView(R.id.home_cardView)
     CardView homeCardView;
-    @BindView(R.id.home_logOut_btn)
+    @BindView(R.id.home_transaction_btn)
     Button homeLogOutBtn;
     @BindView(R.id.home_toolbar_user_name)
     TextView homeToolbarUserName;
@@ -115,14 +116,14 @@ public class Home extends AppCompatActivity implements HomeView {
         return this;
     }
 
-    @OnClick({R.id.home_add_user_btn, R.id.home_logOut_btn, R.id.home_toolbar_menuImage, R.id.home_toolbar_searchImage})
+    @OnClick({R.id.home_add_user_btn, R.id.home_transaction_btn, R.id.home_toolbar_menuImage, R.id.home_toolbar_searchImage})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.home_add_user_btn:
                 Utils.setIntent(this, AddUser.class);
                 break;
-            case R.id.home_logOut_btn:
-                Utils.googleSignOut(this);
+            case R.id.home_transaction_btn:
+                Utils.setIntent(this, UpdateTransaction.class);
                 break;
             case R.id.home_toolbar_menuImage:
                 createMenu();
@@ -142,6 +143,9 @@ public class Home extends AppCompatActivity implements HomeView {
                     break;
                 case R.id.home_menu_accounts:
                     Utils.setIntent(Home.this, Accounts.class);
+                    return true;
+                case R.id.home_menu_logout:
+                    Utils.googleSignOut(this);
                     return true;
                 default:
                     return false;

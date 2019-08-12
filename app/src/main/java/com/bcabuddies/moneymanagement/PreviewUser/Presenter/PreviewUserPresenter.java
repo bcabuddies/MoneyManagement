@@ -11,4 +11,6 @@ public interface PreviewUserPresenter extends BasePresenter<PreviewUserView> {
     void addText(TextView previewTextTV, TextView previewDataTV);
 
     void submitData(ArrayList<String> imageList);
+
+    void submitTakeData();
 }

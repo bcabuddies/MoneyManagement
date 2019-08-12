@@ -144,6 +144,39 @@ public class PreviewUserPresenterImpl implements PreviewUserPresenter {
                 });
     }
 
+    @Override
+    public void submitTakeData() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        customerID = parcelable.getUserID();
+        userMap.clear();
+        userMap.put("name", Utils.AESEncryptionString(parcelable.getName()));
+        userMap.put("type", Utils.AESEncryptionString(parcelable.getType()));
+        userMap.put("age", Utils.AESEncryptionString(parcelable.getAge()));
+        userMap.put("amount", Utils.AESEncryptionString(parcelable.getAmount()));
+        userMap.put("rate", Utils.AESEncryptionString(parcelable.getIntRate()));
+        userMap.put("date", Utils.AESEncryptionString(parcelable.getDate()));
+        userMap.put("phone", Utils.AESEncryptionString(parcelable.getPhone()));
+        userMap.put("admin", Utils.AESEncryptionString(Objects.requireNonNull(auth.getCurrentUser()).getEmail()));
+        userMap.put("completed", Utils.AESEncryptionString("no"));
+        userMap.put("userID", customerID);
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("Customers").document(String.valueOf(customerID))
+                .set(userMap)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.e(TAG, "submitData: customer user ID = " + customerID);
+                        Log.e(TAG, "submitData: data uploaded on firestore ");
+                        Utils.adjustCash(parcelable.getAmount(), parcelable.getType());
+                        view.everythingDone();
+                    } else {
+                        Log.e(TAG, "submitData: error uploading data set" + Objects.requireNonNull(task.getException()).getMessage());
+                        view.errorMsg("Some Error, Please try again!");
+                    }
+                });
+    }
+
     private void uploadImage(StorageReference storageReference, byte[] image, String name) {
         customerID = parcelable.getUserID();
         StorageReference uploadFile = storageReference.child("Customers/" + customerID + "/" + name + ".jpg");

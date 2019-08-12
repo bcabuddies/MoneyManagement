@@ -1,12 +1,12 @@
 package com.bcabuddies.moneymanagement.Model;
 
 public class UserModel extends UserModelID {
-    private String aadhar, address, age, date, amount, name, rate, reference, relative;
+    private String aadhar, address, age, date, amount, name, rate, reference, relative, type;
 
     public UserModel() {
     }
 
-    public UserModel(String aadhar, String address, String age, String date, String amount, String name, String rate, String reference, String relative) {
+    public UserModel(String aadhar, String address, String age, String date, String amount, String name, String rate, String reference, String relative, String type) {
         this.aadhar = aadhar;
         this.address = address;
         this.age = age;
@@ -16,6 +16,15 @@ public class UserModel extends UserModelID {
         this.rate = rate;
         this.reference = reference;
         this.relative = relative;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getAadhar() {

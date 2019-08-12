@@ -11,4 +11,6 @@ public interface AddUserPresenter extends BasePresenter<AddUserView> {
     void checkDetailsAndSubmit(UsersParcelable parcelable);
 
     void setUserID();
+
+    void getCash();
 }

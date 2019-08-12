@@ -50,6 +50,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         String amount = Utils.AESDecryptionString(userList.get(position).getAmount());
         String rate = Utils.AESDecryptionString(userList.get(position).getRate());
         String uid = userList.get(position).UserModelID;
+        String type = Utils.AESDecryptionString(userList.get(position).getType());
 
         //to calculate next Date
         String TAG = "HomeAdapter";
@@ -73,6 +74,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         holder.amountTV.setText(result + context.getString(R.string.rupee_symbol));
         holder.intAmountTV.setText(rate + "%");
         holder.userIdTV.setText(uid);
+
+        if (type.contains("give")) {
+            holder.userCard.setCardBackgroundColor(context.getColor(R.color.light_green));
+        } else if (type.contains("take")) {
+            holder.userCard.setCardBackgroundColor(context.getColor(R.color.light_red));
+        }
 
         Bundle data = new Bundle();
         data.putString("uid", uid);

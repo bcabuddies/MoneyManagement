@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 public class AddUserPresenterImpl implements AddUserPresenter {
 
@@ -73,25 +74,44 @@ public class AddUserPresenterImpl implements AddUserPresenter {
         if (parcelable.getPhone().isEmpty())
             view.TextFieldsError("Please Add Phone", 4);
 
-        if (
-                !parcelable.getName().isEmpty() &&
-                        !parcelable.getAge().isEmpty() &&
-                        !parcelable.getAmount().isEmpty() &&
-                        !parcelable.getIntRate().isEmpty() &&
-                        parcelable.getAddress() != null &&
-                        parcelable.getAadhar() != null &&
-                        !parcelable.getDate().isEmpty() &&
-                        parcelable.getReference() != null &&
-                        parcelable.getRelative() != null &&
-                        parcelable.getType() != null &&
-                        parcelable.getPhone() != null
-        ) {
-            //all fields and images is filled
-            Log.e(TAG, "checkDetailsAndSubmit: fields are complete " + parcelable.toString());
-            Utils.setIntentParcel(view.getContext(), PreviewUser.class, "data", parcelable);
-        } else {
-            Log.e(TAG, "checkDetailsAndSubmit: error in some field ");
-            Toast.makeText(view.getContext(), "Please add all Images", Toast.LENGTH_SHORT).show();
+        if (parcelable.getType().equals("give")) {
+            if (
+                    !parcelable.getName().isEmpty() &&
+                            !parcelable.getAge().isEmpty() &&
+                            !parcelable.getAmount().isEmpty() &&
+                            !parcelable.getIntRate().isEmpty() &&
+                            parcelable.getAddress() != null &&
+                            parcelable.getAadhar() != null &&
+                            !parcelable.getDate().isEmpty() &&
+                            parcelable.getReference() != null &&
+                            parcelable.getRelative() != null &&
+                            parcelable.getType() != null &&
+                            parcelable.getPhone() != null
+            ) {
+                //all fields and images is filled
+                Log.e(TAG, "checkDetailsAndSubmit: fields are complete " + parcelable.toString());
+                Utils.setIntentParcel(view.getContext(), PreviewUser.class, "data", parcelable);
+            } else {
+                Log.e(TAG, "checkDetailsAndSubmit: error in some field ");
+                Toast.makeText(view.getContext(), "Please add all Images", Toast.LENGTH_SHORT).show();
+            }
+        } else if (parcelable.getType().equals("take")) {
+            if (
+                    !parcelable.getName().isEmpty() &&
+                            !parcelable.getAge().isEmpty() &&
+                            !parcelable.getAmount().isEmpty() &&
+                            !parcelable.getIntRate().isEmpty() &&
+                            !parcelable.getDate().isEmpty() &&
+                            parcelable.getType() != null &&
+                            parcelable.getPhone() != null
+            ) {
+                //all fields and images is filled
+                Log.e(TAG, "checkDetailsAndSubmit: fields are complete " + parcelable.toString());
+                Utils.setIntentParcel(view.getContext(), PreviewUser.class, "data", parcelable);
+            } else {
+                Log.e(TAG, "checkDetailsAndSubmit: error in some field ");
+                Toast.makeText(view.getContext(), "Please add all Images", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -109,6 +129,18 @@ public class AddUserPresenterImpl implements AddUserPresenter {
                 String customerID = "1";
                 Log.e(TAG, "onEvent: zero customers so this is 1st " + customerID);
                 view.userID(customerID);
+            }
+        });
+    }
+
+    @Override
+    public void getCash() {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("Admins").document("Accounts")
+                .get().addOnCompleteListener(task -> {
+            if (task.getResult().exists()) {
+                String cash = Utils.AESDecryptionString(Objects.requireNonNull(task.getResult().getString("cash")));
+                view.setCash(cash);
             }
         });
     }

@@ -8,4 +8,6 @@ public interface AddUserView extends BaseView {
     void showDate(String date);
 
     void userID(String id);
+
+    void setCash(String cash);
 }

@@ -40,6 +40,7 @@ public class PreviewUser extends AppCompatActivity implements PreviewUserView {
 
     private PreviewUserPresenter previewUserPresenter;
     private ArrayList<String> list = new ArrayList<>();
+    private UsersParcelable parcelable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class PreviewUser extends AppCompatActivity implements PreviewUserView {
 
         Bundle data = getIntent().getExtras();
         assert data != null;
-        UsersParcelable parcelable = data.getParcelable("data");
+        parcelable = data.getParcelable("data");
         assert parcelable != null;
         Log.e(TAG, "onCreate: parcelable in PreviewUser.class " + parcelable.toString());
 
@@ -59,10 +60,12 @@ public class PreviewUser extends AppCompatActivity implements PreviewUserView {
         previewUserPresenter.attachView(this);
         previewUserPresenter.addText(previewTextTV, previewDataTV);
 
-        list.add(parcelable.getAadhar());
-        list.add(parcelable.getAddress());
-        list.add(parcelable.getReference());
-        list.add(parcelable.getRelative());
+        if (parcelable.getType().equals("give")) {
+            list.add(parcelable.getAadhar());
+            list.add(parcelable.getAddress());
+            list.add(parcelable.getReference());
+            list.add(parcelable.getRelative());
+        }
 
         previewGridView.setAdapter(new GridAdapter(list, this));
     }
@@ -75,7 +78,10 @@ public class PreviewUser extends AppCompatActivity implements PreviewUserView {
     @OnClick(R.id.preview_submitBtn)
     public void onViewClicked() {
         previewSubmitBtn.setEnabled(false);
-        previewUserPresenter.submitData(list);
+        if (parcelable.getType().equals("give"))
+            previewUserPresenter.submitData(list);
+        else if (parcelable.getType().equals("take"))
+            previewUserPresenter.submitTakeData();
     }
 
     @Override

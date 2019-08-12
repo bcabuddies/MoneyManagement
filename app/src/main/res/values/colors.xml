@@ -11,4 +11,6 @@
     <color name="green">#00C400</color>
     <color name="blue_bg">#1A9AA5</color>
     <color name="trans">#00000000</color>
+    <color name="light_green">#81C784</color>
+    <color name="light_red">#E57373</color>
 </resources>

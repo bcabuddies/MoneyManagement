@@ -36,6 +36,7 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     final int aadhar_code = 101, address_code = 102, reference_code = 103, relative_code = 104;
     private final String YES = "Yes";
     private final String TAG = "AddUser.java";
+
     @BindView(R.id.add_user_name_textLayout)
     TextInputLayout addUserNameTextLayout;
     @BindView(R.id.add_user_age_textLayout)
@@ -84,6 +85,8 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     TextView addUserDocsTV;
     @BindView(R.id.add_user_relative_imageView)
     ImageView addUserRelativeImageView;
+    @BindView(R.id.add_user_cashTV)
+    TextView addUserCashTV;
 
     private UsersParcelable usersParcelable;
     private AddUserPresenter presenter;
@@ -102,6 +105,7 @@ public class AddUser extends AppCompatActivity implements AddUserView {
         usersParcelable = new UsersParcelable();
 
         presenter.setUserID();
+        presenter.getCash();
 
         addUserGiveRadio.setChecked(true);
     }
@@ -262,6 +266,12 @@ public class AddUser extends AppCompatActivity implements AddUserView {
     public void userID(String id) {
         user_id = id;
         addUserTopTV.setText("Add user " + user_id);
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void setCash(String cash) {
+        addUserCashTV.setText("Cash Account = " + cash);
     }
 
     @Override

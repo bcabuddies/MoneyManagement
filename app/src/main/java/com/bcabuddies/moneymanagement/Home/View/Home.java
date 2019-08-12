@@ -14,7 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bcabuddies.moneymanagement.Accounts.Accounts;
+import com.bcabuddies.moneymanagement.Accounts.View.Accounts;
 import com.bcabuddies.moneymanagement.AddUser.View.AddUser;
 import com.bcabuddies.moneymanagement.Home.Adapter.HomeAdapter;
 import com.bcabuddies.moneymanagement.Home.Presenter.HomePresenter;

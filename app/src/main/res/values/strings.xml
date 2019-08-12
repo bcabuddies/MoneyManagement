@@ -43,4 +43,8 @@
     <string name="type">Type</string>
     <string name="cash">cash</string>
     <string name="transaction">Transaction</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="total">Total</string>
 </resources>
